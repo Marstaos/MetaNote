@@ -1,0 +1,2906 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MetaNote - 课程视频自动笔记生成工具</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- GSAP 动画库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <!-- Lottie 动画 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+    <!-- Swiper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.7/swiper-bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.7/swiper-bundle.min.css">
+    <!-- Preline UI -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@preline/plugin@1.0.0/dist/preline.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                        secondary: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            200: '#e2e8f0',
+                            300: '#cbd5e1',
+                            400: '#94a3b8',
+                            500: '#64748b',
+                            600: '#475569',
+                            700: '#334155',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                        },
+                        accent: {
+                            50: '#fdf4ff',
+                            100: '#fae8ff',
+                            200: '#f5d0fe',
+                            300: '#f0abfc',
+                            400: '#e879f9',
+                            500: '#d946ef',
+                            600: '#c026d3',
+                            700: '#a21caf',
+                            800: '#86198f',
+                            900: '#701a75',
+                        },
+                        success: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            200: '#a7f3d0',
+                            300: '#6ee7b7',
+                            400: '#34d399',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'Noto Sans SC', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'float': 'float 3s ease-in-out infinite',
+                        'pulse-slow': 'pulse 5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'bounce-slow': 'bounce 2s infinite',
+                        'spin-slow': 'spin 8s linear infinite',
+                        'spin-reverse': 'spin 15s linear infinite reverse',
+                        'bounce-right': 'bounceRight 1s infinite',
+                        'wave': 'wave 2.5s infinite',
+                        'marquee': 'marquee 25s linear infinite',
+                        'blob': 'blob 7s infinite',
+                        'shimmer': 'shimmer 2s linear infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        bounceRight: {
+                            '0%, 100%': { transform: 'translateX(0)' },
+                            '50%': { transform: 'translateX(10px)' },
+                        },
+                        wave: {
+                            '0%': { transform: 'rotate(0deg)' },
+                            '10%': { transform: 'rotate(14deg)' },
+                            '20%': { transform: 'rotate(-8deg)' },
+                            '30%': { transform: 'rotate(14deg)' },
+                            '40%': { transform: 'rotate(-4deg)' },
+                            '50%': { transform: 'rotate(10deg)' },
+                            '60%': { transform: 'rotate(0deg)' },
+                            '100%': { transform: 'rotate(0deg)' },
+                        },
+                        marquee: {
+                            '0%': { transform: 'translateX(0%)' },
+                            '100%': { transform: 'translateX(-100%)' },
+                        },
+                        blob: {
+                            '0%': {
+                                transform: 'scale(1) translate(0px, 0px)'
+                            },
+                            '33%': {
+                                transform: 'scale(1.1) translate(30px, -50px)'
+                            },
+                            '66%': {
+                                transform: 'scale(0.9) translate(-20px, 20px)'
+                            },
+                            '100%': {
+                                transform: 'scale(1) translate(0px, 0px)'
+                            }
+                        },
+                        shimmer: {
+                            '0%': {
+                                backgroundPosition: '-500px 0'
+                            },
+                            '100%': {
+                                backgroundPosition: '500px 0'
+                            }
+                        }
+                    },
+                    transitionDuration: {
+                        '2000': '2000ms',
+                    },
+                    backdropBlur: {
+                        'xs': '2px',
+                    },
+                    boxShadow: {
+                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+                        'neon': '0 0 5px theme(colors.primary.400), 0 0 20px theme(colors.primary.600)',
+                        'neon-dark': '0 0 5px theme(colors.purple.400), 0 0 20px theme(colors.purple.600)',
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* 全局样式 */
+        body {
+            scroll-behavior: smooth;
+        }
+        
+        /* 滚动条美化 */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(247, 250, 252, 0.8);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(14, 165, 233, 0.5);
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(14, 165, 233, 0.8);
+        }
+        
+        .dark ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.8);
+        }
+        
+        .dark ::-webkit-scrollbar-thumb {
+            background: rgba(14, 165, 233, 0.3);
+        }
+        
+        .dark ::-webkit-scrollbar-thumb:hover {
+            background: rgba(14, 165, 233, 0.5);
+        }
+        
+        /* 渐变文本 */
+        .gradient-text {
+            background: linear-gradient(90deg, #0ea5e9, #a855f7, #ec4899);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            background-size: 200% auto;
+            animation: gradientText 4s ease infinite;
+        }
+        
+        @keyframes gradientText {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* 卡片悬浮效果 */
+        .card-hover {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-hover:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        /* 按钮悬浮效果 */
+        .btn-hover {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.42, 0, 0.58, 1);
+        }
+        .btn-hover::before {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 140%;
+            height: 180%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translate(-50%, -50%) rotate(45deg);
+            opacity: 0;
+            transition: all 0.6s cubic-bezier(0.42, 0, 0.58, 1);
+        }
+        .btn-hover:hover::before {
+            opacity: 1;
+            transform: translate(-50%, -50%) rotate(45deg) scale(1.1);
+        }
+        .btn-hover:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px -10px rgba(14, 165, 233, 0.6);
+        }
+        
+        /* 玻璃态效果 */
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        
+        .dark .glass-effect {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        /* 3D卡片效果 */
+        .card-3d {
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        
+        .card-3d-content {
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            transform: translateZ(0);
+        }
+        
+        .card-3d:hover .card-3d-content {
+            transform: translateZ(20px);
+        }
+        
+        /* 动态边框 */
+        .animated-border {
+            position: relative;
+        }
+        
+        .animated-border::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #0ea5e9, #a855f7);
+            transition: width 0.4s ease;
+        }
+        
+        .animated-border:hover::after {
+            width: 100%;
+        }
+        
+        /* 动态背景循环 */
+        .animated-bg {
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* 闪光效果 */
+        .shimmer-bg {
+            background: linear-gradient(90deg, 
+                rgba(255, 255, 255, 0) 0%, 
+                rgba(255, 255, 255, 0.2) 50%, 
+                rgba(255, 255, 255, 0) 100%);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+        
+        /* 悬浮图标动画 */
+        .icon-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .icon-hover:hover {
+            transform: translateY(-5px);
+            color: #0ea5e9;
+        }
+        
+        /* 波浪背景 */
+        .wave-bg {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .wave-bg::before {
+            content: "";
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            z-index: -1;
+            background: radial-gradient(ellipse at center, rgba(14, 165, 233, 0.2) 0%, rgba(14, 165, 233, 0) 70%);
+            animation: wave 15s linear infinite;
+        }
+        
+        @keyframes wave {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* 动态模糊 */
+        .blur-animate {
+            filter: blur(0);
+            transition: filter 0.5s ease;
+        }
+        
+        .blur-animate:hover {
+            filter: blur(1px);
+        }
+        
+        /* 动态沉浸式导航栏 */
+        .immersive-navbar {
+            transition: background-color 0.5s ease, padding 0.5s ease;
+        }
+        
+        /* 径向渐变背景 */
+        .radial-gradient {
+            background: radial-gradient(circle at center, var(--tw-gradient-from) 0%, var(--tw-gradient-to) 100%);
+        }
+        
+        /* 滚动指示器 */
+        @keyframes scrollIndicator {
+            0%, 100% { transform: translateY(0); opacity: 1; }
+            50% { transform: translateY(10px); opacity: 0.5; }
+        }
+        
+        .scroll-indicator {
+            animation: scrollIndicator 2s ease-in-out infinite;
+        }
+        
+        /* Blob动画 */
+        .blob {
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+            animation: blob 8s ease-in-out infinite;
+        }
+        
+        @keyframes blob {
+            0% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+            25% { border-radius: 40% 60% 70% 30% / 30% 40% 60% 70%; }
+            50% { border-radius: 70% 30% 50% 50% / 30% 30% 70% 70%; }
+            75% { border-radius: 30% 70% 70% 30% / 50% 50% 30% 70%; }
+            100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+        }
+        
+        /* Swiper样式覆盖 */
+        .swiper {
+            width: 100%;
+            height: 100%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .swiper-slide {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .swiper-pagination-bullet-active {
+            background: #0ea5e9 !important;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-100 font-sans antialiased transition-colors duration-300 overflow-x-hidden">
+    <!-- 动态背景 -->
+    <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        <!-- 渐变球 -->
+        <div class="absolute top-1/4 left-1/5 w-96 h-96 bg-primary-400/20 dark:bg-primary-700/20 rounded-full filter blur-3xl animate-blob"></div>
+        <div class="absolute bottom-1/3 right-1/4 w-96 h-96 bg-accent-400/20 dark:bg-accent-700/20 rounded-full filter blur-3xl animate-blob animation-delay-2000"></div>
+        <div class="absolute top-2/3 left-1/3 w-80 h-80 bg-success-400/20 dark:bg-success-700/20 rounded-full filter blur-3xl animate-blob animation-delay-4000"></div>
+        
+        <!-- 网格背景 -->
+        <div class="absolute inset-0 bg-grid-pattern bg-[length:50px_50px] opacity-[0.03] dark:opacity-[0.02]"></div>
+    </div>
+
+    <!-- 导航栏 -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20">
+                <div class="flex items-center">
+                    <a href="#" class="flex items-center space-x-2 group">
+                        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-primary-400 to-accent-500 flex items-center justify-center text-white shadow-lg transition-all duration-300 group-hover:scale-110">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <span class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-accent-500 dark:from-primary-400 dark:to-accent-400">MetaNote</span>
+                    </a>
+                </div>
+                <div class="hidden md:flex items-center space-x-1">
+                    <a href="#overview" class="text-gray-600 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 px-3 py-2 rounded-md text-sm font-medium animated-border transition-colors">概述</a>
+                    <a href="#features" class="text-gray-600 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 px-3 py-2 rounded-md text-sm font-medium animated-border transition-colors">功能</a>
+                    <a href="#how-it-works" class="text-gray-600 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 px-3 py-2 rounded-md text-sm font-medium animated-border transition-colors">原理</a>
+                    <a href="#demo" class="text-gray-600 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 px-3 py-2 rounded-md text-sm font-medium animated-border transition-colors">示例</a>
+                    <a href="#getting-started" class="text-gray-600 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 px-3 py-2 rounded-md text-sm font-medium animated-border transition-colors">开始</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="theme-toggle" class="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-300 hover:rotate-12">
+                        <i class="fas fa-moon dark:hidden"></i>
+                        <i class="fas fa-sun hidden dark:block"></i>
+                    </button>
+                    <button class="md:hidden p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" data-hs-overlay="#mobile-menu">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 移动端菜单 -->
+    <div id="mobile-menu" class="hs-overlay hidden fixed inset-0 z-60 w-full h-full bg-black/50 backdrop-blur-md">
+        <div class="hs-overlay-open:translate-x-0 -translate-x-full fixed top-0 left-0 transition-all duration-500 transform h-full w-80 bg-white dark:bg-gray-800 shadow-2xl">
+            <div class="flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-700">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary-400 to-accent-500 flex items-center justify-center text-white">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <span class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-accent-500 dark:from-primary-400 dark:to-accent-400">MetaNote</span>
+                </div>
+                <button class="hs-overlay-toggle p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" data-hs-overlay="#mobile-menu">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="p-6 flex flex-col space-y-6">
+                <a href="#overview" class="flex items-center text-gray-600 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 transition-colors group" data-hs-overlay="#mobile-menu">
+                    <span class="w-2 h-2 rounded-full bg-primary-500 mr-3 opacity-0 group-hover:opacity-100 transition-all"></span>
+                    概述
+                </a>
+                <a href="#features" class="flex items-center text-gray-600 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 transition-colors group" data-hs-overlay="#mobile-menu">
+                    <span class="w-2 h-2 rounded-full bg-primary-500 mr-3 opacity-0 group-hover:opacity-100 transition-all"></span>
+                    功能
+                </a>
+                <a href="#how-it-works" class="flex items-center text-gray-600 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 transition-colors group" data-hs-overlay="#mobile-menu">
+                    <span class="w-2 h-2 rounded-full bg-primary-500 mr-3 opacity-0 group-hover:opacity-100 transition-all"></span>
+                    原理
+                </a>
+                <a href="#demo" class="flex items-center text-gray-600 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 transition-colors group" data-hs-overlay="#mobile-menu">
+                    <span class="w-2 h-2 rounded-full bg-primary-500 mr-3 opacity-0 group-hover:opacity-100 transition-all"></span>
+                    示例
+                </a>
+                <a href="#getting-started" class="flex items-center text-gray-600 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 transition-colors group" data-hs-overlay="#mobile-menu">
+                    <span class="w-2 h-2 rounded-full bg-primary-500 mr-3 opacity-0 group-hover:opacity-100 transition-all"></span>
+                    开始
+                </a>
+                <div class="pt-6 mt-6 border-t border-gray-200 dark:border-gray-700">
+                    <a href="#" class="flex items-center justify-center w-full px-4 py-3 text-sm font-medium text-white bg-gradient-to-r from-primary-500 to-accent-500 rounded-lg shadow-md transition-all hover:from-primary-600 hover:to-accent-600 btn-hover">
+                        立即开始使用
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 英雄区域 -->
+    <header class="relative min-h-screen flex items-center overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <!-- 3D网格背景 -->
+            <div class="absolute inset-0 opacity-30 dark:opacity-20" id="hero-bg"></div>
+            
+            <!-- 渐变光晕 -->
+            <div class="absolute top-1/4 left-1/4 w-1/2 h-1/2 bg-gradient-radial from-primary-400/30 to-transparent dark:from-primary-600/20 rounded-full filter blur-3xl"></div>
+            <div class="absolute bottom-1/4 right-1/4 w-1/3 h-1/3 bg-gradient-radial from-accent-400/20 to-transparent dark:from-accent-600/10 rounded-full filter blur-3xl"></div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20 relative z-10">
+            <div class="flex flex-col lg:flex-row items-center">
+                <div class="lg:w-1/2 text-center lg:text-left mb-12 lg:mb-0">
+                    <div class="relative inline-block mb-4">
+                        <span class="inline-block px-3 py-1 text-xs font-semibold bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200 rounded-full animate-pulse-slow">Nexas</span>
+                    </div>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 revealer">
+                        <span class="gradient-text">MetaNote</span> <span class="block mt-2">把网课搞成笔记</span>
+                    </h1>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto lg:mx-0 mb-8 revealer">
+                        听网课听完就忘了，懒得自己做笔记，但是后面又想找回来复习看看，如果又去看视频，很难精准找到知识点，太降低效率。<br><br>
+                        MetaNote 是一个简单而强大的工具，能够从课程视频中自动生成带有关键图像的结构化 Markdown 笔记。它帮你搞定网课笔记。
+                    </p>
+                    <div class="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 revealer">
+                        <a href="https://github.com/Marstaos/MetaNote" target="_blank" class="btn-hover inline-flex items-center justify-center px-8 py-4 text-base font-medium rounded-xl shadow-xl text-white bg-gradient-to-r from-primary-500 to-accent-500 hover:from-primary-600 hover:to-accent-600 transition-all transform">
+                            访问GitHub <i class="fab fa-github ml-2 animate-bounce-right"></i>
+                        </a>
+                        <a href="#demo" class="mt-4 sm:mt-0 btn-hover inline-flex items-center justify-center px-8 py-4 text-base font-medium rounded-xl shadow-md border border-primary-200 dark:border-primary-800 text-primary-700 bg-primary-50 hover:bg-primary-100 dark:text-primary-100 dark:bg-primary-900/50 dark:hover:bg-primary-800/70 transition-all">
+                            查看示例 <i class="fas fa-eye ml-2"></i>
+                        </a>
+                    </div>
+                    
+                    <!-- 技术标签 -->
+                    <div class="mt-12 revealer">
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">鸣谢</p>
+                        <div class="flex flex-wrap justify-center lg:justify-start gap-3">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200">
+                                <i class="fas fa-microphone-alt mr-1"></i> FunASR
+                            </span>
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200">
+                                <i class="fas fa-robot mr-1"></i> LLaVA
+                            </span>
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200">
+                                <i class="fab fa-linux mr-1"></i> Ollama
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lg:w-1/2 relative">
+                    <!-- 3D悬浮效果容器 -->
+                    <div class="relative w-full max-w-lg mx-auto perspective-1000">
+                        <!-- 发光背景 -->
+                        <div class="absolute inset-0 bg-gradient-to-r from-primary-500/20 to-accent-500/20 rounded-2xl filter blur-3xl animate-pulse-slow"></div>
+                        
+                        <!-- 悬浮卡片 -->
+                        <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-700 transform transition-all hover:scale-[1.02] duration-700 ease-out hover:shadow-2xl">
+                            <div class="p-4 bg-gray-100 dark:bg-gray-700 flex items-center space-x-2">
+                                <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                                <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                                <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                                <div class="ml-auto text-xs text-gray-500 dark:text-gray-400">网课自动变成Markdown笔记</div>
+                            </div>
+                            <!-- 笔记内容 -->
+                            <div class="p-6 transform transition-transform duration-700 will-change-transform">
+                                <div id="typing-container" class="text-sm md:text-base text-left font-mono bg-gray-50 dark:bg-gray-900 p-4 rounded-lg overflow-x-auto"></div>
+                            </div>
+                            
+                            <!-- 悬浮元素 -->
+                            <div class="absolute -top-6 -right-6 w-12 h-12 bg-accent-500 rounded-full flex items-center justify-center text-white animate-bounce-slow opacity-70">
+                                <i class="fas fa-magic"></i>
+                            </div>
+                            <div class="absolute -bottom-6 -left-6 w-16 h-16 bg-primary-500 rounded-full flex items-center justify-center text-white animate-float opacity-70">
+                                <i class="fas fa-robot text-lg"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </header>
+
+    <!-- 项目概述 -->
+    <section id="overview" class="py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <div class="absolute inset-0 bg-gray-100 dark:bg-gray-800/50"></div>
+            <!-- 波浪形状 -->
+            <div class="absolute top-0 left-0 right-0 h-20 bg-white dark:bg-gray-900" style="clip-path: ellipse(75% 100% at 50% 0%)"></div>
+            <div class="absolute bottom-0 left-0 right-0 h-20 bg-white dark:bg-gray-900" style="clip-path: ellipse(75% 100% at 50% 100%)"></div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto relative z-10">
+            <div class="text-center mb-16">
+                <div class="inline-block mb-2">
+                    <div class="flex items-center justify-center w-16 h-16 mx-auto bg-primary-100 dark:bg-primary-900 rounded-full text-primary-500 dark:text-primary-400 mb-4 revealer">
+                        <i class="fas fa-lightbulb text-2xl"></i>
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4 revealer">项目概述</h2>
+                    <div class="w-24 h-1.5 bg-gradient-to-r from-primary-500 to-accent-500 mx-auto rounded-full revealer"></div>
+                </div>
+                <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mt-6 revealer">
+                    MetaNote 帮你把网课搞成笔记。免得你懒得记，后面又得有东西复习。
+                </p>
+            </div>
+            
+            <div class="relative">
+                <!-- 背景装饰 -->
+                <div class="absolute -top-10 -right-10 w-64 h-64 bg-primary-400 dark:bg-primary-700 rounded-full filter blur-5xl opacity-20 animate-blob"></div>
+                <div class="absolute -bottom-10 -left-10 w-64 h-64 bg-accent-400 dark:bg-accent-700 rounded-full filter blur-5xl opacity-20 animate-blob animation-delay-4000"></div>
+                
+                <!-- 内容卡片 -->
+                <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-8 md:p-12 card-3d border border-gray-200 dark:border-gray-700 bg-opacity-70 dark:bg-opacity-70 backdrop-blur-sm">
+                    <div class="card-3d-content flex flex-col lg:flex-row">
+                        <div class="lg:w-3/5 pr-0 lg:pr-12 mb-10 lg:mb-0">
+                            <p class="text-lg md:text-xl text-gray-600 dark:text-gray-300 leading-relaxed revealer">
+                                MetaNote 是一个简单而强大的工具，能够从课程视频中自动生成带有关键图像的结构化 Markdown 笔记。它结合了语音识别、智能帧提取和大语言模型技术，帮助学习者更专注于理解内容而非记录笔记。
+                            </p>
+                            
+                            <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6 revealer-group">
+                                <div class="bg-gradient-to-br from-primary-50 to-blue-50 dark:from-gray-800 dark:to-gray-750 p-6 rounded-xl border border-primary-100 dark:border-gray-700 shadow-sm transition-all hover:shadow-md revealer">
+                                    <div class="w-14 h-14 bg-primary-100 dark:bg-primary-900/50 rounded-2xl flex items-center justify-center text-primary-600 dark:text-primary-400 mb-4 transform transition-transform group-hover:scale-110 revealer">
+                                        <i class="fas fa-brain text-2xl"></i>
+                                    </div>
+                                    <h3 class="text-lg font-semibold mb-2">AI驱动</h3>
+                                    <p class="text-gray-600 dark:text-gray-300">选用Ollama或者Qwen来选帧</p>
+                                </div>
+                                <div class="bg-gradient-to-br from-primary-50 to-blue-50 dark:from-gray-800 dark:to-gray-750 p-6 rounded-xl border border-primary-100 dark:border-gray-700 shadow-sm transition-all hover:shadow-md revealer">
+                                    <div class="w-14 h-14 bg-primary-100 dark:bg-primary-900/50 rounded-2xl flex items-center justify-center text-primary-600 dark:text-primary-400 mb-4 revealer">
+                                        <i class="fas fa-layer-group text-2xl"></i>
+                                    </div>
+                                    <h3 class="text-lg font-semibold mb-2">结构化输出</h3>
+                                    <p class="text-gray-600 dark:text-gray-300">生成格式清晰的Markdown笔记，省的你又去在视频里跳</p>
+                                </div>
+                                <div class="bg-gradient-to-br from-primary-50 to-blue-50 dark:from-gray-800 dark:to-gray-750 p-6 rounded-xl border border-primary-100 dark:border-gray-700 shadow-sm transition-all hover:shadow-md revealer">
+                                    <div class="w-14 h-14 bg-primary-100 dark:bg-primary-900/50 rounded-2xl flex items-center justify-center text-primary-600 dark:text-primary-400 mb-4 revealer">
+                                        <i class="fas fa-clock text-2xl"></i>
+                                    </div>
+                                    <h3 class="text-lg font-semibold mb-2">节省时间</h3>
+                                    <p class="text-gray-600 dark:text-gray-300">自动化笔记生成过程，提高学习效率，专注内容理解</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 数字展示 -->
+                        <div class="lg:w-2/5 bg-gradient-to-br from-primary-500/5 to-accent-500/5 dark:from-primary-900/30 dark:to-accent-900/30 rounded-2xl p-6 md:p-8 flex flex-col justify-center revealer">
+                            <h3 class="text-xl font-bold mb-8 text-center text-gray-700 dark:text-gray-200">MetaNote 效率可能提升</h3>
+                            
+                            <div class="space-y-6">
+                                <div class="relative">
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">笔记生成时间</span>
+                                        <span class="text-sm font-medium text-primary-600 dark:text-primary-400">90% 减少</span>
+                                    </div>
+                                    <div class="w-full h-2.5 bg-gray-200 dark:bg-gray-700 rounded-full">
+                                        <div class="h-2.5 rounded-full bg-gradient-to-r from-primary-500 to-accent-500 animate-bar-90" style="width:0%"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="relative">
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">关键信息准确率</span>
+                                        <span class="text-sm font-medium text-primary-600 dark:text-primary-400">95%</span>
+                                    </div>
+                                    <div class="w-full h-2.5 bg-gray-200 dark:bg-gray-700 rounded-full">
+                                        <div class="h-2.5 rounded-full bg-gradient-to-r from-primary-500 to-accent-500 animate-bar-95" style="width:0%"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="relative">
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">内容理解专注度提升</span>
+                                        <span class="text-sm font-medium text-primary-600 dark:text-primary-400">80%</span>
+                                    </div>
+                                    <div class="w-full h-2.5 bg-gray-200 dark:bg-gray-700 rounded-full">
+                                        <div class="h-2.5 rounded-full bg-gradient-to-r from-primary-500 to-accent-500 animate-bar-80" style="width:0%"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="relative">
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">编不出来了</span>
+                                        <span class="text-sm font-medium text-primary-600 dark:text-primary-400">75%</span>
+                                    </div>
+                                    <div class="w-full h-2.5 bg-gray-200 dark:bg-gray-700 rounded-full">
+                                        <div class="h-2.5 rounded-full bg-gradient-to-r from-primary-500 to-accent-500 animate-bar-75" style="width:0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 功能特点 -->
+    <section id="features" class="py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto relative z-10">
+            <div class="text-center mb-16">
+                <div class="inline-block">
+                    <div class="flex items-center justify-center w-16 h-16 mx-auto bg-primary-100 dark:bg-primary-900 rounded-full text-primary-500 dark:text-primary-400 mb-4 revealer">
+                        <i class="fas fa-star text-2xl"></i>
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4 revealer">功能特点</h2>
+                    <div class="w-24 h-1.5 bg-gradient-to-r from-primary-500 to-accent-500 mx-auto rounded-full revealer"></div>
+                </div>
+                <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mt-6 revealer">
+                    MetaNote 提供一系列强大功能，让笔记生成变得简单高效
+                </p>
+            </div>
+            
+            <!-- 特点卡片墙 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 perspective-1000 revealer-group">
+                <div class="card-hover transform transition-all duration-500 revealer">
+                    <div class="group h-full bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-8 border border-gray-200 dark:border-gray-700 overflow-hidden relative">
+                        <!-- 装饰背景 -->
+                        <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-primary-100 dark:bg-primary-900/50 rounded-full opacity-80 group-hover:scale-150 transition-transform duration-500"></div>
+                        
+                        <div class="relative">
+                            <div class="w-16 h-16 bg-gradient-to-br from-primary-400 to-primary-600 dark:from-primary-500 dark:to-primary-700 rounded-2xl flex items-center justify-center text-white mb-6 transform group-hover:rotate-12 transition-transform duration-300 shadow-lg">
+                                <i class="fas fa-microphone-alt text-2xl"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-3 text-gray-800 dark:text-gray-100">自动语音识别</h3>
+                            <p class="text-gray-600 dark:text-gray-300">使用 FunASR 高精度转录视频中的语音内容，准确率高达95%以上。快速提取课程视频中的文字内容。</p>
+
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-hover transform transition-all duration-500 revealer">
+                    <div class="group h-full bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-8 border border-gray-200 dark:border-gray-700 overflow-hidden relative">
+                        <!-- 装饰背景 -->
+                        <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-accent-100 dark:bg-accent-900/50 rounded-full opacity-80 group-hover:scale-150 transition-transform duration-500"></div>
+                        
+                        <div class="relative">
+                            <div class="w-16 h-16 bg-gradient-to-br from-accent-400 to-accent-600 dark:from-accent-500 dark:to-accent-700 rounded-2xl flex items-center justify-center text-white mb-6 transform group-hover:rotate-12 transition-transform duration-300 shadow-lg">
+                                <i class="fas fa-image text-2xl"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-3 text-gray-800 dark:text-gray-100">智能关键帧提取</h3>
+                            <p class="text-gray-600 dark:text-gray-300">基于场景变化和内容稳定性分析，提取最有价值的画面。自动选择包含重要教学信息的帧。</p>
+
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-hover transform transition-all duration-500 revealer">
+                    <div class="group h-full bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-8 border border-gray-200 dark:border-gray-700 overflow-hidden relative">
+                        <!-- 装饰背景 -->
+                        <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-success-100 dark:bg-success-900/50 rounded-full opacity-80 group-hover:scale-150 transition-transform duration-500"></div>
+                        
+                        <div class="relative">
+                            <div class="w-16 h-16 bg-gradient-to-br from-success-400 to-success-600 dark:from-success-500 dark:to-success-700 rounded-2xl flex items-center justify-center text-white mb-6 transform group-hover:rotate-12 transition-transform duration-300 shadow-lg">
+                                <i class="fas fa-eye text-2xl"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-3 text-gray-800 dark:text-gray-100">多模态理解</h3>
+                            <p class="text-gray-600 dark:text-gray-300">支持使用本地 Ollama 或阿里云千问多模态模型理解图像内容。准确识别图表、公式和关键教学内容。</p>
+
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-hover transform transition-all duration-500 revealer">
+                    <div class="group h-full bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-8 border border-gray-200 dark:border-gray-700 overflow-hidden relative">
+                        <!-- 装饰背景 -->
+                        <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-blue-100 dark:bg-blue-900/50 rounded-full opacity-80 group-hover:scale-150 transition-transform duration-500"></div>
+                        
+                        <div class="relative">
+                            <div class="w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-600 dark:from-blue-500 dark:to-blue-700 rounded-2xl flex items-center justify-center text-white mb-6 transform group-hover:rotate-12 transition-transform duration-300 shadow-lg">
+                                <i class="fas fa-file-alt text-2xl"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-3 text-gray-800 dark:text-gray-100">结构化笔记生成</h3>
+                            <p class="text-gray-600 dark:text-gray-300">自动整合文本和图像，生成格式清晰的 Markdown 笔记。支持标题、列表、代码块和图像等丰富格式。</p>
+
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-hover transform transition-all duration-500 revealer">
+                    <div class="group h-full bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-8 border border-gray-200 dark:border-gray-700 overflow-hidden relative">
+                        <!-- 装饰背景 -->
+                        <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-purple-100 dark:bg-purple-900/50 rounded-full opacity-80 group-hover:scale-150 transition-transform duration-500"></div>
+                        
+                        <div class="relative">
+                            <div class="w-16 h-16 bg-gradient-to-br from-purple-400 to-purple-600 dark:from-purple-500 dark:to-purple-700 rounded-2xl flex items-center justify-center text-white mb-6 transform group-hover:rotate-12 transition-transform duration-300 shadow-lg">
+                                <i class="fas fa-terminal text-2xl"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-3 text-gray-800 dark:text-gray-100">简单易用</h3>
+                            <p class="text-gray-600 dark:text-gray-300">提供简洁的命令行接口，操作方便，一键生成笔记。无需复杂配置，快速上手使用。</p>
+
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-hover transform transition-all duration-500 revealer">
+                    <div class="group h-full bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-8 border border-gray-200 dark:border-gray-700 overflow-hidden relative">
+                        <!-- 装饰背景 -->
+                        <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-pink-100 dark:bg-pink-900/50 rounded-full opacity-80 group-hover:scale-150 transition-transform duration-500"></div>
+                        
+                        <div class="relative">
+                            <div class="w-16 h-16 bg-gradient-to-br from-pink-400 to-pink-600 dark:from-pink-500 dark:to-pink-700 rounded-2xl flex items-center justify-center text-white mb-6 transform group-hover:rotate-12 transition-transform duration-300 shadow-lg">
+                                <i class="fas fa-cogs text-2xl"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-3 text-gray-800 dark:text-gray-100">灵活配置</h3>
+                            <p class="text-gray-600 dark:text-gray-300">支持本地或云端处理，适应不同场景需求。可根据个人偏好和设备性能调整处理方式。</p>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 快速特点轮播 -->
+            <div class="mt-16 overflow-hidden bg-gradient-to-r from-primary-500 to-accent-500 dark:from-primary-600 dark:to-accent-600 rounded-2xl relative revealer">
+                <div class="absolute inset-0 bg-pattern-dots opacity-10"></div>
+                
+                <div class="py-8 px-4 relative">
+                    <div class="marquee-container relative flex">
+                        <div class="marquee-content flex animate-marquee">
+                            <div class="mx-4 flex items-center">
+                                <div class="bg-white dark:bg-gray-800 w-3 h-3 rounded-full mr-3"></div>
+                                <span class="text-white text-lg font-medium whitespace-nowrap">高精度语音识别</span>
+                            </div>
+                            <div class="mx-4 flex items-center">
+                                <div class="bg-white dark:bg-gray-800 w-3 h-3 rounded-full mr-3"></div>
+                                <span class="text-white text-lg font-medium whitespace-nowrap">智能关键帧提取</span>
+                            </div>
+                            <div class="mx-4 flex items-center">
+                                <div class="bg-white dark:bg-gray-800 w-3 h-3 rounded-full mr-3"></div>
+                                <span class="text-white text-lg font-medium whitespace-nowrap">多模态AI评估</span>
+                            </div>
+                            <div class="mx-4 flex items-center">
+                                <div class="bg-white dark:bg-gray-800 w-3 h-3 rounded-full mr-3"></div>
+                                <span class="text-white text-lg font-medium whitespace-nowrap">结构化笔记生成</span>
+                            </div>
+                            <div class="mx-4 flex items-center">
+                                <div class="bg-white dark:bg-gray-800 w-3 h-3 rounded-full mr-3"></div>
+                                <span class="text-white text-lg font-medium whitespace-nowrap">简单操作界面</span>
+                            </div>
+                            <div class="mx-4 flex items-center">
+                                <div class="bg-white dark:bg-gray-800 w-3 h-3 rounded-full mr-3"></div>
+                                <span class="text-white text-lg font-medium whitespace-nowrap">本地与云端处理</span>
+                            </div>
+                            <div class="mx-4 flex items-center">
+                                <div class="bg-white dark:bg-gray-800 w-3 h-3 rounded-full mr-3"></div>
+                                <span class="text-white text-lg font-medium whitespace-nowrap">高准确度内容提取</span>
+                            </div>
+                            <div class="mx-4 flex items-center">
+                                <div class="bg-white dark:bg-gray-800 w-3 h-3 rounded-full mr-3"></div>
+                                <span class="text-white text-lg font-medium whitespace-nowrap">灵活配置模型</span>
+                            </div>
+                        </div>
+                        <div class="marquee-content flex animate-marquee" aria-hidden="true">
+                            <div class="mx-4 flex items-center">
+                                <div class="bg-white dark:bg-gray-800 w-3 h-3 rounded-full mr-3"></div>
+                                <span class="text-white text-lg font-medium whitespace-nowrap">高精度语音识别</span>
+                            </div>
+                            <div class="mx-4 flex items-center">
+                                <div class="bg-white dark:bg-gray-800 w-3 h-3 rounded-full mr-3"></div>
+                                <span class="text-white text-lg font-medium whitespace-nowrap">智能关键帧提取</span>
+                            </div>
+                            <div class="mx-4 flex items-center">
+                                <div class="bg-white dark:bg-gray-800 w-3 h-3 rounded-full mr-3"></div>
+                                <span class="text-white text-lg font-medium whitespace-nowrap">多模态AI评估</span>
+                            </div>
+                            <div class="mx-4 flex items-center">
+                                <div class="bg-white dark:bg-gray-800 w-3 h-3 rounded-full mr-3"></div>
+                                <span class="text-white text-lg font-medium whitespace-nowrap">结构化笔记生成</span>
+                            </div>
+                            <div class="mx-4 flex items-center">
+                                <div class="bg-white dark:bg-gray-800 w-3 h-3 rounded-full mr-3"></div>
+                                <span class="text-white text-lg font-medium whitespace-nowrap">简单操作界面</span>
+                            </div>
+                            <div class="mx-4 flex items-center">
+                                <div class="bg-white dark:bg-gray-800 w-3 h-3 rounded-full mr-3"></div>
+                                <span class="text-white text-lg font-medium whitespace-nowrap">本地与云端处理</span>
+                            </div>
+                            <div class="mx-4 flex items-center">
+                                <div class="bg-white dark:bg-gray-800 w-3 h-3 rounded-full mr-3"></div>
+                                <span class="text-white text-lg font-medium whitespace-nowrap">高准确度内容提取</span>
+                            </div>
+                            <div class="mx-4 flex items-center">
+                                <div class="bg-white dark:bg-gray-800 w-3 h-3 rounded-full mr-3"></div>
+                                <span class="text-white text-lg font-medium whitespace-nowrap">灵活配置模型</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 工作原理 -->
+    <section id="how-it-works" class="py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <div class="absolute inset-0 bg-gray-100 dark:bg-gray-800/50"></div>
+            <!-- 网格背景 -->
+            <div class="absolute inset-0 bg-grid-pattern opacity-[0.05]"></div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto relative z-10">
+            <div class="text-center mb-16">
+                <div class="inline-block">
+                    <div class="flex items-center justify-center w-16 h-16 mx-auto bg-primary-100 dark:bg-primary-900 rounded-full text-primary-500 dark:text-primary-400 mb-4 revealer">
+                        <i class="fas fa-cog text-2xl"></i>
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4 revealer">工作原理</h2>
+                    <div class="w-24 h-1.5 bg-gradient-to-r from-primary-500 to-accent-500 mx-auto rounded-full revealer"></div>
+                </div>
+                <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mt-6 revealer">
+                    MetaNote 采用创新的多步处理流程，从视频提取笔记
+                </p>
+            </div>
+            
+            <div class="mb-20 revealer">
+                <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-8 md:p-10 border border-gray-200 dark:border-gray-700">
+                    <h3 class="text-2xl font-semibold mb-8 text-gray-800 dark:text-gray-100">系统架构</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="p-6 bg-gradient-to-br from-primary-50 to-primary-100 dark:from-primary-900/40 dark:to-primary-800/40 rounded-xl border border-primary-200 dark:border-primary-700 shadow-sm">
+                            <div class="w-12 h-12 bg-primary-500 rounded-full flex items-center justify-center text-white mb-4">
+                                <i class="fas fa-file-video"></i>
+                            </div>
+                            <h4 class="font-semibold mb-2">视频输入模块</h4>
+                            <p class="text-gray-600 dark:text-gray-300 text-sm">处理视频文件，执行初步分析和分帧</p>
+                        </div>
+                        
+                        <div class="p-6 bg-gradient-to-br from-accent-50 to-accent-100 dark:from-accent-900/40 dark:to-accent-800/40 rounded-xl border border-accent-200 dark:border-accent-700 shadow-sm">
+                            <div class="w-12 h-12 bg-accent-500 rounded-full flex items-center justify-center text-white mb-4">
+                                <i class="fas fa-comment-dots"></i>
+                            </div>
+                            <h4 class="font-semibold mb-2">ASR模块</h4>
+                            <p class="text-gray-600 dark:text-gray-300 text-sm">负责将视频中的语音转换为文本</p>
+                        </div>
+                        
+                        <div class="p-6 bg-gradient-to-br from-primary-50 to-primary-100 dark:from-primary-900/40 dark:to-primary-800/40 rounded-xl border border-primary-200 dark:border-primary-700 shadow-sm">
+                            <div class="w-12 h-12 bg-primary-500 rounded-full flex items-center justify-center text-white mb-4">
+                                <i class="fas fa-film"></i>
+                            </div>
+                            <h4 class="font-semibold mb-2">帧提取模块</h4>
+                            <p class="text-gray-600 dark:text-gray-300 text-sm">从视频中提取潜在关键帧</p>
+                        </div>
+                        
+                        <div class="p-6 bg-gradient-to-br from-success-50 to-success-100 dark:from-success-900/40 dark:to-success-800/40 rounded-xl border border-success-200 dark:border-success-700 shadow-sm">
+                            <div class="w-12 h-12 bg-success-500 rounded-full flex items-center justify-center text-white mb-4">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                            <h4 class="font-semibold mb-2">图像理解模块</h4>
+                            <p class="text-gray-600 dark:text-gray-300 text-sm">评估帧的教育价值</p>
+                        </div>
+                        
+                        <div class="p-6 bg-gradient-to-br from-accent-50 to-accent-100 dark:from-accent-900/40 dark:to-accent-800/40 rounded-xl border border-accent-200 dark:border-accent-700 shadow-sm">
+                            <div class="w-12 h-12 bg-accent-500 rounded-full flex items-center justify-center text-white mb-4">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <h4 class="font-semibold mb-2">内容整合模块</h4>
+                            <p class="text-gray-600 dark:text-gray-300 text-sm">整合分析结果，准备笔记内容</p>
+                        </div>
+                        
+                        <div class="p-6 bg-gradient-to-br from-accent-50 to-accent-100 dark:from-accent-900/40 dark:to-accent-800/40 rounded-xl border border-accent-200 dark:border-accent-700 shadow-sm">
+                            <div class="w-12 h-12 bg-accent-500 rounded-full flex items-center justify-center text-white mb-4">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <h4 class="font-semibold mb-2">笔记生成模块</h4>
+                            <p class="text-gray-600 dark:text-gray-300 text-sm">输出最终的Markdown笔记</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+
+        </div>
+    </section>
+
+    <!-- 关键帧价值判断 -->
+    <section id="value-frame" class="py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto relative z-10">
+            <div class="text-center mb-16">
+                <div class="inline-block">
+                    <div class="flex items-center justify-center w-16 h-16 mx-auto bg-primary-100 dark:bg-primary-900 rounded-full text-primary-500 dark:text-primary-400 mb-4 revealer">
+                        <i class="fas fa-sort-amount-up text-2xl"></i>
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4 revealer">关键帧价值判断</h2>
+                    <div class="w-24 h-1.5 bg-gradient-to-r from-primary-500 to-accent-500 mx-auto rounded-full revealer"></div>
+                </div>
+                <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mt-6 revealer">
+                    MetaNote 采用先进的多阶段评估体系，确保提取最有价值的视觉内容
+                </p>
+            </div>
+            
+            <!-- 三角形设计 -->
+            <div class="mt-10 perspective-1000">
+                <div class="swiper mySwiper">
+                    <div class="swiper-wrapper pb-12">
+                        <!-- 第一阶段 -->
+                        <div class="swiper-slide">
+                            <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-700 transform transition-all hover:shadow-2xl h-full card-hover revealer">
+                                <div class="p-1 bg-gradient-to-r from-primary-500 to-accent-500"></div>
+                                <div class="p-8">
+                                    <div class="w-20 h-20 bg-gradient-to-br from-primary-400 to-primary-600 dark:from-primary-500 dark:to-primary-700 rounded-2xl shadow-lg flex items-center justify-center text-white mb-6 transform transition-all">
+                                        <i class="fas fa-search text-3xl"></i>
+                                    </div>
+                                    <h3 class="text-2xl font-semibold mb-6 text-gray-800 dark:text-gray-100">1. 初步关键帧提取</h3>
+                                    
+                                    <div class="space-y-4">
+                                        <div class="flex items-center space-x-3 p-4 bg-gray-50 dark:bg-gray-750 rounded-xl">
+                                            <div class="flex-shrink-0">
+                                                <div class="w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center text-primary-500 dark:text-primary-400">
+                                                    <i class="fas fa-video-slash"></i>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <h4 class="font-medium">场景切换检测</h4>
+                                                <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">识别视觉内容发生显著变化的关键点</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="flex items-center space-x-3 p-4 bg-gray-50 dark:bg-gray-750 rounded-xl">
+                                            <div class="flex-shrink-0">
+                                                <div class="w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center text-primary-500 dark:text-primary-400">
+                                                    <i class="fas fa-pause"></i>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <h4 class="font-medium">内容稳定性分析</h4>
+                                                <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">识别内容保持稳定一段时间的区域</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="flex items-center space-x-3 p-4 bg-gray-50 dark:bg-gray-750 rounded-xl">
+                                            <div class="flex-shrink-0">
+                                                <div class="w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center text-primary-500 dark:text-primary-400">
+                                                    <i class="fas fa-chart-bar"></i>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <h4 class="font-medium">视觉复杂度评分</h4>
+                                                <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">分析边缘密度、图像熵、区域特征等</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mt-8 flex items-center justify-center">
+                                        <div class="relative w-40 h-40">
+                                            <div class="absolute inset-0 animation-delay-200">
+                                                <svg class="w-full h-full" viewBox="0 0 100 100">
+                                                    <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(14, 165, 233, 0.2)" stroke-width="8" stroke-dasharray="300" stroke-dashoffset="0" stroke-linecap="round">
+                                                        <animate attributeName="stroke-dashoffset" from="300" to="0" dur="2s" fill="freeze" />
+                                                    </circle>
+                                                </svg>
+                                            </div>
+                                            <div class="absolute inset-0 flex items-center justify-center">
+                                                <span class="text-4xl font-bold text-primary-500 dark:text-primary-400">1</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 第二阶段 -->
+                        <div class="swiper-slide">
+                            <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-700 transform transition-all hover:shadow-2xl h-full card-hover revealer">
+                                <div class="p-1 bg-gradient-to-r from-accent-500 to-purple-500"></div>
+                                <div class="p-8">
+                                    <div class="w-20 h-20 bg-gradient-to-br from-accent-400 to-accent-600 dark:from-accent-500 dark:to-accent-700 rounded-2xl shadow-lg flex items-center justify-center text-white mb-6 transform transition-all">
+                                        <i class="fas fa-robot text-3xl"></i>
+                                    </div>
+                                    <h3 class="text-2xl font-semibold mb-6 text-gray-800 dark:text-gray-100">2. 多模态AI评估</h3>
+                                    
+                                    <div class="space-y-4">
+                                        <div class="flex items-center space-x-3 p-4 bg-gray-50 dark:bg-gray-750 rounded-xl">
+                                            <div class="flex-shrink-0">
+                                                <div class="w-10 h-10 rounded-full bg-accent-100 dark:bg-accent-900 flex items-center justify-center text-accent-500 dark:text-accent-400">
+                                                    <i class="fas fa-lightbulb"></i>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <h4 class="font-medium">智能提示</h4>
+                                                <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">引导模型识别教学内容（幻灯片、图表、代码、公式等）</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="flex items-center space-x-3 p-4 bg-gray-50 dark:bg-gray-750 rounded-xl">
+                                            <div class="flex-shrink-0">
+                                                <div class="w-10 h-10 rounded-full bg-accent-100 dark:bg-accent-900 flex items-center justify-center text-accent-500 dark:text-accent-400">
+                                                    <i class="fas fa-brain"></i>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <h4 class="font-medium">内容理解</h4>
+                                                <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">分析图像中的教育信息价值</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="flex items-center space-x-3 p-4 bg-gray-50 dark:bg-gray-750 rounded-xl">
+                                            <div class="flex-shrink-0">
+                                                <div class="w-10 h-10 rounded-full bg-accent-100 dark:bg-accent-900 flex items-center justify-center text-accent-500 dark:text-accent-400">
+                                                    <i class="fas fa-check-double"></i>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <h4 class="font-medium">适用性判断</h4>
+                                                <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">评估是否适合作为笔记配图</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mt-8 flex items-center justify-center">
+                                        <div class="relative w-40 h-40">
+                                            <div class="absolute inset-0 animation-delay-400">
+                                                <svg class="w-full h-full" viewBox="0 0 100 100">
+                                                    <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(216, 80, 233, 0.2)" stroke-width="8" stroke-dasharray="300" stroke-dashoffset="0" stroke-linecap="round">
+                                                        <animate attributeName="stroke-dashoffset" from="300" to="0" dur="2s" fill="freeze" />
+                                                    </circle>
+                                                </svg>
+                                            </div>
+                                            <div class="absolute inset-0 flex items-center justify-center">
+                                                <span class="text-4xl font-bold text-accent-500 dark:text-accent-400">2</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 第三阶段 -->
+                        <div class="swiper-slide">
+                            <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-700 transform transition-all hover:shadow-2xl h-full card-hover revealer">
+                                <div class="p-1 bg-gradient-to-r from-success-500 to-primary-500"></div>
+                                <div class="p-8">
+                                    <div class="w-20 h-20 bg-gradient-to-br from-success-400 to-success-600 dark:from-success-500 dark:to-success-700 rounded-2xl shadow-lg flex items-center justify-center text-white mb-6 transform transition-all">
+                                        <i class="fas fa-filter text-3xl"></i>
+                                    </div>
+                                    <h3 class="text-2xl font-semibold mb-6 text-gray-800 dark:text-gray-100">3. 去重与筛选</h3>
+                                    
+                                    <div class="space-y-4">
+                                        <div class="flex items-center space-x-3 p-4 bg-gray-50 dark:bg-gray-750 rounded-xl">
+                                            <div class="flex-shrink-0">
+                                                <div class="w-10 h-10 rounded-full bg-success-100 dark:bg-success-900 flex items-center justify-center text-success-500 dark:text-success-400">
+                                                    <i class="fas fa-fingerprint"></i>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <h4 class="font-medium">感知哈希去重</h4>
+                                                <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">过滤内容非常相似的帧</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="flex items-center space-x-3 p-4 bg-gray-50 dark:bg-gray-750 rounded-xl">
+                                            <div class="flex-shrink-0">
+                                                <div class="w-10 h-10 rounded-full bg-success-100 dark:bg-success-900 flex items-center justify-center text-success-500 dark:text-success-400">
+                                                    <i class="fas fa-clock"></i>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <h4 class="font-medium">时间间隔筛选</h4>
+                                                <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">确保帧之间有足够的时间间隔</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="flex items-center space-x-3 p-4 bg-gray-50 dark:bg-gray-750 rounded-xl">
+                                            <div class="flex-shrink-0">
+                                                <div class="w-10 h-10 rounded-full bg-success-100 dark:bg-success-900 flex items-center justify-center text-success-500 dark:text-success-400">
+                                                    <i class="fas fa-award"></i>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <h4 class="font-medium">质量阈值</h4>
+                                                <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">仅保留评分高于设定阈值的帧</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mt-8 flex items-center justify-center">
+                                        <div class="relative w-40 h-40">
+                                            <div class="absolute inset-0 animation-delay-600">
+                                                <svg class="w-full h-full" viewBox="0 0 100 100">
+                                                    <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(16, 185, 129, 0.2)" stroke-width="8" stroke-dasharray="300" stroke-dashoffset="0" stroke-linecap="round">
+                                                        <animate attributeName="stroke-dashoffset" from="300" to="0" dur="2s" fill="freeze" />
+                                                    </circle>
+                                                </svg>
+                                            </div>
+                                            <div class="absolute inset-0 flex items-center justify-center">
+                                                <span class="text-4xl font-bold text-success-500 dark:text-success-400">3</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+            </div>
+            
+            <!-- 价值评估流程图 -->
+            <div class="mt-16 revealer">
+                <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-8 md:p-10 border border-gray-200 dark:border-gray-700">
+                    <h3 class="text-2xl font-semibold mb-8 text-center text-gray-800 dark:text-gray-100">评估流程</h3>
+                    
+                    <!-- 线性流程图 -->
+                    <div class="max-w-5xl mx-auto">
+                        <div class="flex flex-col md:flex-row justify-between items-center md:space-x-4">
+                            <!-- 步骤 1: 输入视频 -->
+                            <div class="flex flex-col items-center text-center mb-10 md:mb-0 w-full md:w-1/5">
+                                <div class="flex flex-col items-center relative">
+                                    <div class="w-24 h-24 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center mb-3">
+                                        <div class="w-14 h-14 rounded-full bg-blue-500 flex items-center justify-center text-white">
+                                            <i class="fas fa-video text-xl"></i>
+                                        </div>
+                                    </div>
+                                    <div class="absolute top-0 left-0 w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-sm font-bold">1</div>
+                                </div>
+                                <h4 class="font-semibold text-gray-800 dark:text-gray-100">输入视频</h4>
+                                <p class="text-sm mt-2 text-gray-600 dark:text-gray-400">处理课程视频文件</p>
+                            </div>
+                            
+                            <!-- 连接线 -->
+                            <div class="hidden md:block w-8 border-t-2 border-gray-300 dark:border-gray-600"></div>
+                            
+                            <!-- 步骤 2: 提取候选帧 -->
+                            <div class="flex flex-col items-center text-center mb-10 md:mb-0 w-full md:w-1/5">
+                                <div class="flex flex-col items-center relative">
+                                    <div class="w-24 h-24 rounded-full bg-purple-100 dark:bg-purple-900/40 flex items-center justify-center mb-3">
+                                        <div class="w-14 h-14 rounded-full bg-purple-500 flex items-center justify-center text-white">
+                                            <i class="fas fa-film text-xl"></i>
+                                        </div>
+                                    </div>
+                                    <div class="absolute top-0 left-0 w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-white text-sm font-bold">2</div>
+                                </div>
+                                <h4 class="font-semibold text-gray-800 dark:text-gray-100">提取候选帧</h4>
+                                <p class="text-sm mt-2 text-gray-600 dark:text-gray-400">基于场景变化和内容稳定性提取帧</p>
+                            </div>
+                            
+                            <!-- 连接线 -->
+                            <div class="hidden md:block w-8 border-t-2 border-gray-300 dark:border-gray-600"></div>
+                            
+                            <!-- 步骤 3: AI评估价值 -->
+                            <div class="flex flex-col items-center text-center mb-10 md:mb-0 w-full md:w-1/5">
+                                <div class="flex flex-col items-center relative">
+                                    <div class="w-24 h-24 rounded-full bg-green-100 dark:bg-green-900/40 flex items-center justify-center mb-3">
+                                        <div class="w-14 h-14 rounded-full bg-green-500 flex items-center justify-center text-white">
+                                            <i class="fas fa-brain text-xl"></i>
+                                        </div>
+                                    </div>
+                                    <div class="absolute top-0 left-0 w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-white text-sm font-bold">3</div>
+                                </div>
+                                <h4 class="font-semibold text-gray-800 dark:text-gray-100">AI评估价值</h4>
+                                <p class="text-sm mt-2 text-gray-600 dark:text-gray-400">多模态模型评估教育价值</p>
+                            </div>
+                            
+                            <!-- 连接线 -->
+                            <div class="hidden md:block w-8 border-t-2 border-gray-300 dark:border-gray-600"></div>
+                            
+                            <!-- 步骤 4: 价值排序 -->
+                            <div class="flex flex-col items-center text-center mb-10 md:mb-0 w-full md:w-1/5">
+                                <div class="flex flex-col items-center relative">
+                                    <div class="w-24 h-24 rounded-full bg-pink-100 dark:bg-pink-900/40 flex items-center justify-center mb-3">
+                                        <div class="w-14 h-14 rounded-full bg-pink-500 flex items-center justify-center text-white">
+                                            <i class="fas fa-sort-amount-up text-xl"></i>
+                                        </div>
+                                    </div>
+                                    <div class="absolute top-0 left-0 w-8 h-8 rounded-full bg-pink-500 flex items-center justify-center text-white text-sm font-bold">4</div>
+                                </div>
+                                <h4 class="font-semibold text-gray-800 dark:text-gray-100">价值排序</h4>
+                                <p class="text-sm mt-2 text-gray-600 dark:text-gray-400">按教育价值对帧进行排序</p>
+                            </div>
+                            
+                            <!-- 连接线 -->
+                            <div class="hidden md:block w-8 border-t-2 border-gray-300 dark:border-gray-600"></div>
+                            
+                            <!-- 步骤 5: 最终选择 -->
+                            <div class="flex flex-col items-center text-center w-full md:w-1/5">
+                                <div class="flex flex-col items-center relative">
+                                    <div class="w-24 h-24 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center mb-3">
+                                        <div class="w-14 h-14 rounded-full bg-blue-500 flex items-center justify-center text-white">
+                                            <i class="fas fa-check-circle text-xl"></i>
+                                        </div>
+                                    </div>
+                                    <div class="absolute top-0 left-0 w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-sm font-bold">5</div>
+                                </div>
+                                <h4 class="font-semibold text-gray-800 dark:text-gray-100">最终选择</h4>
+                                <p class="text-sm mt-2 text-gray-600 dark:text-gray-400">选择最有价值的帧用于笔记</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- 应用场景 -->
+    <section id="use-cases" class="py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto relative z-10">
+            <div class="text-center mb-16">
+                <div class="inline-block">
+                    <div class="flex items-center justify-center w-16 h-16 mx-auto bg-primary-100 dark:bg-primary-900 rounded-full text-primary-500 dark:text-primary-400 mb-4 revealer">
+                        <i class="fas fa-bullseye text-2xl"></i>
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4 revealer">应用场景</h2>
+                    <div class="w-24 h-1.5 bg-gradient-to-r from-primary-500 to-accent-500 mx-auto rounded-full revealer"></div>
+                </div>
+                <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mt-6 revealer">
+                    MetaNote 可应用于多种学习和内容创作场景，为不同用户提供便利
+                </p>
+            </div>
+            
+            <!-- 场景卡片 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 revealer-group">
+                <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-700 h-full group card-hover revealer">
+                    <div class="relative h-48 bg-gradient-to-r from-primary-400 to-accent-400 dark:from-primary-600 dark:to-accent-600 overflow-hidden">
+                        <div class="absolute inset-0 bg-pattern-dots bg-repeat opacity-20"></div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i class="fas fa-user-graduate text-white text-6xl opacity-75 group-hover:scale-110 transition-transform duration-500"></i>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black/60 to-transparent"></div>
+                        <div class="absolute bottom-4 left-6">
+                            <h3 class="text-xl font-bold text-white">学生学习</h3>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-gray-600 dark:text-gray-300">自动整理线上课程、讲座视频的内容，提高学习效率。快速掌握关键知识点，更专注于理解而非记录。</p>
+                        <div class="mt-6 space-y-3">
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <div class="w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center text-primary-500 dark:text-primary-400">
+                                        <i class="fas fa-check text-xs"></i>
+                                    </div>
+                                </div>
+                                <p class="ml-3 text-sm text-gray-600 dark:text-gray-300">MOOC和在线教育平台</p>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <div class="w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center text-primary-500 dark:text-primary-400">
+                                        <i class="fas fa-check text-xs"></i>
+                                    </div>
+                                </div>
+                                <p class="ml-3 text-sm text-gray-600 dark:text-gray-300">自学视频教程</p>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <div class="w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center text-primary-500 dark:text-primary-400">
+                                        <i class="fas fa-check text-xs"></i>
+                                    </div>
+                                </div>
+                                <p class="ml-3 text-sm text-gray-600 dark:text-gray-300">学术讲座和研讨会</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-700 h-full group card-hover revealer">
+                    <div class="relative h-48 bg-gradient-to-r from-accent-400 to-purple-400 dark:from-accent-600 dark:to-purple-600 overflow-hidden">
+                        <div class="absolute inset-0 bg-pattern-dots bg-repeat opacity-20"></div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i class="fas fa-chalkboard-teacher text-white text-6xl opacity-75 group-hover:scale-110 transition-transform duration-500"></i>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black/60 to-transparent"></div>
+                        <div class="absolute bottom-4 left-6">
+                            <h3 class="text-xl font-bold text-white">教师备课</h3>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-gray-600 dark:text-gray-300">快速提取和整理教学视频中的关键信息，节省备课时间。提高教学资料的质量和准确性。</p>
+                        <div class="mt-6 space-y-3">
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <div class="w-6 h-6 rounded-full bg-accent-100 dark:bg-accent-900 flex items-center justify-center text-accent-500 dark:text-accent-400">
+                                        <i class="fas fa-check text-xs"></i>
+                                    </div>
+                                </div>
+                                <p class="ml-3 text-sm text-gray-600 dark:text-gray-300">教学视频资料整理</p>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <div class="w-6 h-6 rounded-full bg-accent-100 dark:bg-accent-900 flex items-center justify-center text-accent-500 dark:text-accent-400">
+                                        <i class="fas fa-check text-xs"></i>
+                                    </div>
+                                </div>
+                                <p class="ml-3 text-sm text-gray-600 dark:text-gray-300">课程内容提炼</p>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <div class="w-6 h-6 rounded-full bg-accent-100 dark:bg-accent-900 flex items-center justify-center text-accent-500 dark:text-accent-400">
+                                        <i class="fas fa-check text-xs"></i>
+                                    </div>
+                                </div>
+                                <p class="ml-3 text-sm text-gray-600 dark:text-gray-300">教学资料数字化</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-700 h-full group card-hover revealer">
+                    <div class="relative h-48 bg-gradient-to-r from-purple-400 to-pink-400 dark:from-purple-600 dark:to-pink-600 overflow-hidden">
+                        <div class="absolute inset-0 bg-pattern-dots bg-repeat opacity-20"></div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i class="fas fa-pen-fancy text-white text-6xl opacity-75 group-hover:scale-110 transition-transform duration-500"></i>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black/60 to-transparent"></div>
+                        <div class="absolute bottom-4 left-6">
+                            <h3 class="text-xl font-bold text-white">内容创作者</h3>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-gray-600 dark:text-gray-300">为教学内容创建结构化文档，提高内容质量。快速整理录制内容，提升创作效率。</p>
+                        <div class="mt-6 space-y-3">
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <div class="w-6 h-6 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center text-purple-500 dark:text-purple-400">
+                                        <i class="fas fa-check text-xs"></i>
+                                    </div>
+                                </div>
+                                <p class="ml-3 text-sm text-gray-600 dark:text-gray-300">在线教育课程制作</p>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <div class="w-6 h-6 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center text-purple-500 dark:text-purple-400">
+                                        <i class="fas fa-check text-xs"></i>
+                                    </div>
+                                </div>
+                                <p class="ml-3 text-sm text-gray-600 dark:text-gray-300">教程内容创作</p>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <div class="w-6 h-6 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center text-purple-500 dark:text-purple-400">
+                                        <i class="fas fa-check text-xs"></i>
+                                    </div>
+                                </div>
+                                <p class="ml-3 text-sm text-gray-600 dark:text-gray-300">内容辅助材料生成</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-700 h-full group card-hover revealer">
+                    <div class="relative h-48 bg-gradient-to-r from-success-400 to-primary-400 dark:from-success-600 dark:to-primary-600 overflow-hidden">
+                        <div class="absolute inset-0 bg-pattern-dots bg-repeat opacity-20"></div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i class="fas fa-brain text-white text-6xl opacity-75 group-hover:scale-110 transition-transform duration-500"></i>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black/60 to-transparent"></div>
+                        <div class="absolute bottom-4 left-6">
+                            <h3 class="text-xl font-bold text-white">编不出来了</h3>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-gray-600 dark:text-gray-300">随便你用来干什么吧</p>
+                        <div class="mt-6 space-y-3">
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <div class="w-6 h-6 rounded-full bg-success-100 dark:bg-success-900 flex items-center justify-center text-success-500 dark:text-success-400">
+                                        <i class="fas fa-check text-xs"></i>
+                                    </div>
+                                </div>
+                                <p class="ml-3 text-sm text-gray-600 dark:text-gray-300">111</p>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <div class="w-6 h-6 rounded-full bg-success-100 dark:bg-success-900 flex items-center justify-center text-success-500 dark:text-success-400">
+                                        <i class="fas fa-check text-xs"></i>
+                                    </div>
+                                </div>
+                                <p class="ml-3 text-sm text-gray-600 dark:text-gray-300">222</p>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <div class="w-6 h-6 rounded-full bg-success-100 dark:bg-success-900 flex items-center justify-center text-success-500 dark:text-success-400">
+                                        <i class="fas fa-check text-xs"></i>
+                                    </div>
+                                </div>
+                                <p class="ml-3 text-sm text-gray-600 dark:text-gray-300">333</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 用户反馈轮播 -->
+            <div class="mt-20 revealer">
+                <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-700">
+                    <div class="p-8 md:p-10">
+                        <h3 class="text-2xl font-semibold mb-8 text-center text-gray-800 dark:text-gray-100">用户反馈（真实反馈）</h3>
+                        
+                        <div class="swiper testimonialSwiper">
+                            <div class="swiper-wrapper pb-16">
+                                <!-- 用户反馈1 -->
+                                <div class="swiper-slide">
+                                    <div class="bg-gray-50 dark:bg-gray-750 rounded-2xl p-6 relative">
+                                        <!-- 引号图标 -->
+                                        <div class="absolute -top-5 left-6 w-10 h-10 flex items-center justify-center">
+                                            <span class="text-4xl text-primary-500 dark:text-primary-400">"</span>
+                                        </div>
+                                        <div class="absolute -bottom-5 right-6 w-10 h-10 flex items-center justify-center rotate-180">
+                                            <span class="text-4xl text-primary-500 dark:text-primary-400">"</span>
+                                        </div>
+                                        
+                                        <p class="text-gray-600 dark:text-gray-300 italic mb-6 pt-4">MetaNote作者也是非常帅。帮我大忙了。前端工程化主要指从前端项目开始开发到部署线上再到后期迭代维护到这一整个过程，从工程的角度管理前端开发，形成前端开发流程的一整套开发规范或解决方案，提高前端开发效率。</p>
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0">
+                                                <div class="w-12 h-12 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold text-lg">L</div>
+                                            </div>
+                                            <div class="ml-4">
+                                                <h4 class="font-semibold">（前端）李正同学</h4>
+                                                <p class="text-sm text-gray-500 dark:text-gray-400">计算机科学专业学生</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- 用户反馈2 -->
+                                <div class="swiper-slide">
+                                    <div class="bg-gray-50 dark:bg-gray-750 rounded-2xl p-6 relative">
+                                        <!-- 引号图标 -->
+                                        <div class="absolute -top-5 left-6 w-10 h-10 flex items-center justify-center">
+                                            <span class="text-4xl text-accent-500 dark:text-accent-400">"</span>
+                                        </div>
+                                        <div class="absolute -bottom-5 right-6 w-10 h-10 flex items-center justify-center rotate-180">
+                                            <span class="text-4xl text-accent-500 dark:text-accent-400">"</span>
+                                        </div>
+                                        
+                                        <p class="text-gray-600 dark:text-gray-300 italic mb-6 pt-4">作为一名教师，MetaNote让我能够更高效地准备教学材料。我用它快速整理视频课程内容，使我能够专注于教学设计而不是繁琐的笔记工作。</p>
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0">
+                                                <div class="w-12 h-12 rounded-full bg-purple-500 text-white flex items-center justify-center font-bold text-lg">W</div>
+                                            </div>
+                                            <div class="ml-4">
+                                                <h4 class="font-semibold">（未来的）任老师</h4>
+                                                <p class="text-sm text-gray-500 dark:text-gray-400">ACM集训队教练</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- 用户反馈3 -->
+                                <div class="swiper-slide">
+                                    <div class="bg-gray-50 dark:bg-gray-750 rounded-2xl p-6 relative">
+                                        <!-- 引号图标 -->
+                                        <div class="absolute -top-5 left-6 w-10 h-10 flex items-center justify-center">
+                                            <span class="text-4xl text-success-500 dark:text-success-400">"</span>
+                                        </div>
+                                        <div class="absolute -bottom-5 right-6 w-10 h-10 flex items-center justify-center rotate-180">
+                                            <span class="text-4xl text-success-500 dark:text-success-400">"</span>
+                                        </div>
+                                        
+                                        <p class="text-gray-600 dark:text-gray-300 italic mb-6 pt-4">你要是能赢，就是货真价实的冠军勇士。好吧，不行我没找到什么合适作为采访的话。</p>
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0">
+                                                <div class="w-12 h-12 rounded-full bg-green-500 text-white flex items-center justify-center font-bold text-lg">Z</div>
+                                            </div>
+                                            <div class="ml-4">
+                                                <h4 class="font-semibold">张风临</h4>
+                                                <p class="text-sm text-gray-500 dark:text-gray-400">河南人</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-pagination"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 快速开始 -->
+    <section id="getting-started" class="py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <div class="absolute inset-0 bg-gray-100 dark:bg-gray-800/50"></div>
+            <!-- 网格背景 -->
+            <div class="absolute inset-0 bg-grid-pattern opacity-[0.05]"></div>
+            <!-- 渐变光晕 -->
+            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-1/2 bg-gradient-radial from-primary-400/20 to-transparent dark:from-primary-600/10 rounded-full filter blur-3xl"></div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto relative z-10">
+            <div class="text-center mb-16">
+                <div class="inline-block">
+                    <div class="flex items-center justify-center w-16 h-16 mx-auto bg-primary-100 dark:bg-primary-900 rounded-full text-primary-500 dark:text-primary-400 mb-4 revealer">
+                        <i class="fas fa-rocket text-2xl"></i>
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4 revealer">快速开始</h2>
+                    <div class="w-24 h-1.5 bg-gradient-to-r from-primary-500 to-accent-500 mx-auto rounded-full revealer"></div>
+                </div>
+                <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mt-6 revealer">
+                    只需几个简单步骤，即可开始使用MetaNote生成智能笔记
+                </p>
+            </div>
+            
+            <!-- 安装启动指南 -->
+            <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl overflow-hidden mb-20 border border-gray-200 dark:border-gray-700 revealer">
+                <div class="md:flex">
+                    <div class="md:w-1/2 p-8 md:p-10">
+                        <h3 class="text-2xl font-semibold mb-6 text-gray-800 dark:text-gray-100 flex items-center">
+                            <span class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900 text-primary-500 dark:text-primary-400 flex items-center justify-center mr-2">
+                                <i class="fas fa-download"></i>
+                            </span>
+                            安装
+                        </h3>
+                        <div class="bg-gray-900 dark:bg-gray-950 rounded-2xl p-5 mb-8 overflow-x-auto">
+                            <pre class="text-gray-300 text-sm md:text-base"><code class="language-bash"># 克隆项目
+git clone https://github.com/username/metanote.git
+cd metanote
+
+# 安装依赖
+pip install -r requirements.txt</code></pre>
+                            <div class="flex justify-end mt-4">
+                                <button class="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-md bg-gray-800 text-gray-300 hover:bg-gray-700">
+                                    <i class="far fa-copy mr-1.5"></i> 复制代码
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <h3 class="text-2xl font-semibold mb-6 text-gray-800 dark:text-gray-100 flex items-center">
+                            <span class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900 text-primary-500 dark:text-primary-400 flex items-center justify-center mr-2">
+                                <i class="fas fa-cog"></i>
+                            </span>
+                            配置
+                        </h3>
+                        <div class="bg-gray-900 dark:bg-gray-950 rounded-2xl p-5 mb-8 overflow-x-auto">
+                            <pre class="text-gray-300 text-sm md:text-base"><code class="language-bash"># 初始化配置文件
+python cli.py config --init</code></pre>
+                            <div class="flex justify-end mt-4">
+                                <button class="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-md bg-gray-800 text-gray-300 hover:bg-gray-700">
+                                    <i class="far fa-copy mr-1.5"></i> 复制代码
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-primary-50 dark:bg-primary-900/30 border border-primary-200 dark:border-primary-800 rounded-xl p-6 mb-8">
+                            <h4 class="font-semibold text-primary-700 dark:text-primary-400 mb-3">配置选项</h4>
+                            <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-300">
+                                <li class="flex items-start">
+                                    <span class="text-primary-500 dark:text-primary-400 mr-2">•</span>
+                                    <span>设置ASR服务器信息</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-primary-500 dark:text-primary-400 mr-2">•</span>
+                                    <span>选择使用Ollama或千问进行图像理解</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-primary-500 dark:text-primary-400 mr-2">•</span>
+                                    <span>配置笔记生成模型和提示语</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-primary-500 dark:text-primary-400 mr-2">•</span>
+                                    <span>调整关键帧提取参数</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <h3 class="text-2xl font-semibold mb-6 text-gray-800 dark:text-gray-100 flex items-center">
+                            <span class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900 text-primary-500 dark:text-primary-400 flex items-center justify-center mr-2">
+                                <i class="fas fa-play"></i>
+                            </span>
+                            基本使用
+                        </h3>
+                        <div class="bg-gray-900 dark:bg-gray-950 rounded-2xl p-5 overflow-x-auto">
+                            <pre class="text-gray-300 text-sm md:text-base"><code class="language-bash"># 启动ASR服务
+python cli.py asr-server --model /path/to/asr/model
+
+# 处理单个视频
+python cli.py process /path/to/video.mp4
+
+# 批量处理视频
+python cli.py batch /path/to/videos/folder --recursive</code></pre>
+                            <div class="flex justify-end mt-4">
+                                <button class="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-md bg-gray-800 text-gray-300 hover:bg-gray-700">
+                                    <i class="far fa-copy mr-1.5"></i> 复制代码
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="md:w-1/2 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-750 dark:to-gray-800 p-8 md:p-10 border-t md:border-t-0 md:border-l border-gray-200 dark:border-gray-700">
+                        <h3 class="text-2xl font-semibold mb-6 text-gray-800 dark:text-gray-100">运行要求</h3>
+                        <div class="space-y-6">
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 mt-1 mr-4">
+                                    <div class="w-12 h-12 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center text-primary-500 dark:text-primary-400 shadow-md">
+                                        <i class="fab fa-python text-xl"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-lg mb-1">Python 3.10或更高版本</h4>
+                                    <p class="text-gray-600 dark:text-gray-300 text-sm">推荐使用Python 3.10以获得最佳兼容性。可通过官方网站或Anaconda安装。</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 mt-1 mr-4">
+                                    <div class="w-12 h-12 rounded-full bg-accent-100 dark:bg-accent-900 flex items-center justify-center text-accent-500 dark:text-accent-400 shadow-md">
+                                        <i class="fas fa-microchip text-xl"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-lg mb-1">下载ASR模型</h4>
+                                    <p class="text-gray-600 dark:text-gray-300 text-sm">模型参考FunASR官方：https://www.modelscope.cn/models/iic/SenseVoiceSmall</p>
+                                    <div class="mt-2">
+                                        <a href="https://www.modelscope.cn/models/iic/SenseVoiceSmall" class="text-success-600 dark:text-success-400 text-sm hover:underline flex items-center">
+                                            <span>前往下载ASR模型SenseVoiceSmall</span>
+                                            <i class="fas fa-external-link-alt ml-1 text-xs"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 mt-1 mr-4">
+                                    <div class="w-12 h-12 rounded-full bg-success-100 dark:bg-success-900 flex items-center justify-center text-success-500 dark:text-success-400 shadow-md">
+                                        <i class="fas fa-film text-xl"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-lg mb-1">FFmpeg</h4>
+                                    <p class="text-gray-600 dark:text-gray-300 text-sm">用于视频处理，需要预先安装。支持视频解码和提取关键帧。</p>
+                                    <div class="mt-2">
+                                        <a href="#" class="text-success-600 dark:text-success-400 text-sm hover:underline flex items-center">
+                                            <span>FFmpeg下载参见README.md</span>
+                                            <i class="fas fa-external-link-alt ml-1 text-xs"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 mt-1 mr-4">
+                                    <div class="w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center text-purple-500 dark:text-purple-400 shadow-md">
+                                        <i class="fas fa-desktop text-xl"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-lg mb-1">本地Ollama安装（可选）</h4>
+                                    <p class="text-gray-600 dark:text-gray-300 text-sm">用于离线图像理解，支持LLaVA多模态模型。</p>
+                                    <div class="mt-2">
+                                        <a href="https://ollama.com/download" class="text-purple-600 dark:text-purple-400 text-sm hover:underline flex items-center">
+                                            <span>Ollama安装指南</span>
+                                            <i class="fas fa-external-link-alt ml-1 text-xs"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 mt-1 mr-4">
+                                    <div class="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center text-blue-500 dark:text-blue-400 shadow-md">
+                                        <i class="fas fa-cloud text-xl"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-lg mb-1">阿里云千问API密钥（可选）</h4>
+                                    <p class="text-gray-600 dark:text-gray-300 text-sm">用于云端图像理解和笔记生成，提供更高质量的结果。</p>
+                                    <div class="mt-2">
+                                        <a href="https://bailian.console.aliyun.com/" class="text-blue-600 dark:text-blue-400 text-sm hover:underline flex items-center">
+                                            <span>获取千问API</span>
+                                            <i class="fas fa-external-link-alt ml-1 text-xs"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-12 bg-gradient-to-r from-primary-50 to-accent-50 dark:from-primary-900/30 dark:to-accent-900/30 border border-primary-200/50 dark:border-primary-800/50 rounded-xl p-6">
+                            <div class="flex">
+                                <div class="flex-shrink-0 mr-4">
+                                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-primary-400 to-accent-400 flex items-center justify-center text-white shadow-md">
+                                        <i class="fas fa-lightbulb text-xl"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-xl mb-3 text-gray-800 dark:text-gray-100">小贴士</h4>
+                                    <p class="text-gray-600 dark:text-gray-300">首次使用时，建议先处理一个短视频测试功能。处理时间取决于视频长度和硬件配置。使用GPU可显著提高处理速度。</p>
+                                    <a href="https://github.com/Marstaos/MetaNote" class="inline-flex items-center mt-4 text-primary-600 dark:text-primary-400 font-medium hover:underline">
+                                        查看技术报告
+                                        <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- QuickStart 指南 -->
+            <div class="revealer">
+                <h3 class="text-2xl font-semibold mb-10 text-center text-gray-800 dark:text-gray-100">QuickStart</h3>
+                <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+                    <div class="p-8">
+                        <div class="space-y-8">
+                            <div>
+                                <h4 class="text-xl font-semibold mb-4 flex items-center text-gray-800 dark:text-gray-100">
+                                    <span class="w-8 h-8 rounded-full bg-primary-500 text-white flex items-center justify-center mr-3">1</span>
+                                    安装
+                                </h4>
+                                <div class="bg-gray-900 dark:bg-gray-950 rounded-xl p-4 overflow-x-auto">
+                                    <pre class="text-gray-300 text-sm"><code class="language-bash"># 克隆项目
+git clone https://github.com/Marstaos/metanote.git
+cd metanote
+
+# 安装依赖
+pip install -r requirements.txt</code></pre>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h4 class="text-xl font-semibold mb-4 flex items-center text-gray-800 dark:text-gray-100">
+                                    <span class="w-8 h-8 rounded-full bg-accent-500 text-white flex items-center justify-center mr-3">2</span>
+                                    配置
+                                </h4>
+                                <p class="mb-4 text-gray-600 dark:text-gray-300">首先，初始化配置文件：</p>
+                                <div class="bg-gray-900 dark:bg-gray-950 rounded-xl p-4 overflow-x-auto mb-4">
+                                    <pre class="text-gray-300 text-sm"><code class="language-bash">python cli.py config --init</code></pre>
+                                </div>
+                                <p class="mb-4 text-gray-600 dark:text-gray-300">这将创建一个 <code class="bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded">config.yaml</code> 文件，您可以编辑此文件以适应您的需求：</p>
+                                <ul class="list-disc pl-6 text-gray-600 dark:text-gray-300 space-y-2">
+                                    <li>设置 ASR 服务器信息</li>
+                                    <li>选择使用 Ollama 或千问进行图像理解</li>
+                                    <li>配置笔记生成模型和提示语</li>
+                                </ul>
+                            </div>
+                            
+                            <div>
+                                <h4 class="text-xl font-semibold mb-4 flex items-center text-gray-800 dark:text-gray-100">
+                                    <span class="w-8 h-8 rounded-full bg-success-500 text-white flex items-center justify-center mr-3">3</span>
+                                    基本使用
+                                </h4>
+                                <p class="mb-4 text-gray-600 dark:text-gray-300">1. <strong>启动 ASR 服务</strong>（如果您还没有运行中的 ASR 服务）：</p>
+                                <div class="bg-gray-900 dark:bg-gray-950 rounded-xl p-4 overflow-x-auto mb-4">
+                                    <pre class="text-gray-300 text-sm"><code class="language-bash">python cli.py asr-server --model /path/to/asr/model</code></pre>
+                                </div>
+                                
+                                <p class="mb-4 text-gray-600 dark:text-gray-300">2. <strong>处理单个视频</strong>：</p>
+                                <div class="bg-gray-900 dark:bg-gray-950 rounded-xl p-4 overflow-x-auto mb-4">
+                                    <pre class="text-gray-300 text-sm"><code class="language-bash">python cli.py process /path/to/video.mp4</code></pre>
+                                </div>
+                                
+                                <p class="mb-4 text-gray-600 dark:text-gray-300">3. <strong>批量处理视频</strong>：</p>
+                                <div class="bg-gray-900 dark:bg-gray-950 rounded-xl p-4 overflow-x-auto">
+                                    <pre class="text-gray-300 text-sm"><code class="language-bash">python cli.py batch /path/to/videos/folder --recursive</code></pre>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h4 class="text-xl font-semibold mb-4 flex items-center text-gray-800 dark:text-gray-100">
+                                    <span class="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center mr-3">4</span>
+                                    运行要求
+                                </h4>
+                                <ul class="text-gray-600 dark:text-gray-300 space-y-3">
+                                    <li class="flex items-center space-x-2">
+                                        <i class="fas fa-check-circle text-primary-500 dark:text-primary-400"></i>
+                                        <span>Python 3.8 或更高版本</span>
+                                    </li>
+                                    <li class="flex items-center space-x-2">
+                                        <i class="fas fa-check-circle text-primary-500 dark:text-primary-400"></i>
+                                        <span>CUDA（推荐，用于 ASR 模型）</span>
+                                    </li>
+                                    <li class="flex items-center space-x-2">
+                                        <i class="fas fa-check-circle text-primary-500 dark:text-primary-400"></i>
+                                        <span>FFmpeg（用于视频处理）</span>
+                                    </li>
+                                    <li class="flex items-center space-x-2">
+                                        <i class="fas fa-check-circle text-primary-500 dark:text-primary-400"></i>
+                                        <span>在基于 Debian/Ubuntu 的系统上，可以通过以下命令安装：</span>
+                                    </li>
+                                </ul>
+                                <div class="bg-gray-900 dark:bg-gray-950 rounded-xl p-4 overflow-x-auto my-4">
+                                    <pre class="text-gray-300 text-sm"><code class="language-bash">sudo apt update && sudo apt install ffmpeg</code></pre>
+                                </div>
+                                <ul class="text-gray-600 dark:text-gray-300 space-y-3">
+                                    <li class="flex items-center space-x-2">
+                                        <i class="fas fa-check-circle text-primary-500 dark:text-primary-400"></i>
+                                        <span>本地 Ollama 安装（可选，用于离线图像理解）</span>
+                                    </li>
+                                    <li class="flex items-center space-x-2">
+                                        <i class="fas fa-check-circle text-primary-500 dark:text-primary-400"></i>
+                                        <span>阿里云千问 API 密钥（可选，用于云端图像理解和笔记生成）</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <div>
+                                <h4 class="text-xl font-semibold mb-4 flex items-center text-gray-800 dark:text-gray-100">
+                                    <span class="w-8 h-8 rounded-full bg-purple-500 text-white flex items-center justify-center mr-3">5</span>
+                                    项目结构
+                                </h4>
+                                <p class="mb-4 text-gray-600 dark:text-gray-300">MetaNote 采用了简洁模块化设计：</p>
+                                <div class="bg-gray-900 dark:bg-gray-950 rounded-xl p-4 overflow-x-auto">
+                                    <pre class="text-gray-300 text-sm"><code>metanote/
+├── asr_client.py       # ASR 客户端
+├── asr_server.py       # ASR 服务器
+├── cli.py              # 命令行接口
+├── config.yaml         # 配置文件
+├── frame_extractor.py  # 帧提取功能
+├── image_processor.py  # 图像理解
+├── main.py             # 主程序
+├── note_generator.py   # 笔记生成
+└── utils.py            # 工具函数</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 效果展示 -->
+    <section id="demo" class="py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto relative z-10">
+            <div class="text-center mb-16">
+                <div class="inline-block">
+                    <div class="flex items-center justify-center w-16 h-16 mx-auto bg-primary-100 dark:bg-primary-900 rounded-full text-primary-500 dark:text-primary-400 mb-4 revealer">
+                        <i class="fas fa-laptop-code text-2xl"></i>
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4 revealer">效果展示</h2>
+                    <div class="w-24 h-1.5 bg-gradient-to-r from-primary-500 to-accent-500 mx-auto rounded-full revealer"></div>
+                </div>
+                <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mt-6 revealer">
+                    查看MetaNote生成的笔记示例，体验AI辅助笔记的效果
+                </p>
+            </div>
+            
+            <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-700 revealer">
+                <div class="lg:flex">
+                    <div class="lg:w-3/5 p-8 lg:p-10">
+                        <h3 class="text-2xl font-semibold mb-8 text-gray-800 dark:text-gray-100">生成的笔记示例</h3>
+                        <div class="bg-gray-50 dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-gray-700 overflow-x-auto">
+                            <pre class="text-gray-800 dark:text-gray-200 text-sm md:text-base"><code class="language-markdown"># 如何进入良性循环：克服拖延症的学习笔记
+                    
+本节课程探讨了如何通过理解拖延的心理机制，采取有效策略进入工作与生活的良性循环。以下是主要内容的结构化总结。
+
+## 一、拖延的心态与焦虑曲线
+拖延往往源于对任务不确定性的恐惧，导致我们选择暂时逃避。然而，这种行为会引发焦虑，并随着拖延时间的增长而加速上升。  
+- **毒舌曲线**：描述了拖延过程中焦虑的变化趋势。如果一直拖延，焦虑如同眼镜蛇昂首，最终变得难以控制。但一旦开始行动，哪怕只是迈出一小步，焦虑也会迅速下降。
+- **红区与蓝区**：  
+    - 红区：拖延阶段，焦虑持续上升。  
+    - 蓝区：开始行动后，焦虑逐渐降低，进入高效工作状态。
+
+![图片 1](./images/image_01.jpg)  
+*图1解释：水坝象征着拖延时积累的焦虑，而"迈出一小步"则是打开闸门的关键，让焦虑如洪水般倾泻，从而缓解心理压力。*
+
+## 二、拖延的恶性循环及其破解
+拖延行为具有自我强化的特点，容易形成恶性循环：  
+1. 拖延 → 焦虑增加 → 自我否定 → 动力消耗 → 更加拖延。  
+2. 解决方法：将拖延转化为良性循环，通过实际行动增强自信和成就感。  
+
+心理学研究表明，以下四点阻碍我们进入良性循环：  
+- **缺乏自信**：目标设定过高或不确定性较强，使人不敢启动。  
+- **任务不愉快**：预期过程或结果令人反感，降低行动意愿。  
+- **目标遥远**：缺乏即时反馈，难以维持动力。  
+- **无法专注**：分心问题严重，影响效率。</code></pre>
+                        </div>
+                        
+                        <div class="mt-8 flex justify-center">
+                            <a href="./example/notes_test_video_2_20250429_222140.md" download class="btn-hover inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-xl shadow-sm text-white bg-gradient-to-r from-primary-500 to-accent-500 hover:from-primary-600 hover:to-accent-600 transition-all">
+                                <i class="fas fa-download mr-2"></i> 下载示例笔记
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="lg:w-2/5 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-750 dark:to-gray-800 p-8 lg:p-10 border-t lg:border-t-0 lg:border-l border-gray-200 dark:border-gray-700">
+                        <div class="mb-8">
+                            <h4 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100">MetaNote优势</h4>
+                            <ul class="space-y-4">
+                                <li class="flex items-start">
+                                    <div class="flex-shrink-0 mt-1 mr-3">
+                                        <div class="w-6 h-6 rounded-full bg-gradient-to-br from-primary-400 to-primary-600 dark:from-primary-500 dark:to-primary-700 flex items-center justify-center text-white shadow-sm">
+                                            <i class="fas fa-check text-xs"></i>
+                                        </div>
+                                    </div>
+                                    <span class="text-gray-600 dark:text-gray-300"><strong>自动整理</strong>：自动化笔记生成过程，减少手动记录时间</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <div class="flex-shrink-0 mt-1 mr-3">
+                                        <div class="w-6 h-6 rounded-full bg-gradient-to-br from-accent-400 to-accent-600 dark:from-accent-500 dark:to-accent-700 flex items-center justify-center text-white shadow-sm">
+                                            <i class="fas fa-check text-xs"></i>
+                                        </div>
+                                    </div>
+                                    <span class="text-gray-600 dark:text-gray-300"><strong>智能选帧</strong>：仅保留最有价值的帧作为配图，提取关键教学内容</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <div class="flex-shrink-0 mt-1 mr-3">
+                                        <div class="w-6 h-6 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 dark:from-purple-500 dark:to-purple-700 flex items-center justify-center text-white shadow-sm">
+                                            <i class="fas fa-check text-xs"></i>
+                                        </div>
+                                    </div>
+                                    <span class="text-gray-600 dark:text-gray-300"><strong>跨平台支持</strong>：兼容所有主流操作系统，支持多种视频格式</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <div class="flex-shrink-0 mt-1 mr-3">
+                                        <div class="w-6 h-6 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 dark:from-blue-500 dark:to-blue-700 flex items-center justify-center text-white shadow-sm">
+                                            <i class="fas fa-check text-xs"></i>
+                                        </div>
+                                    </div>
+                                    <span class="text-gray-600 dark:text-gray-300"><strong>灵活配置</strong>：支持本地或云端处理，适应不同场景需求和硬件条件</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100">未来计划</h4>
+                            <div class="space-y-4">
+                                <div class="group flex items-start">
+                                    <div class="flex-shrink-0 mt-1 mr-3">
+                                        <div class="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-400 group-hover:bg-primary-100 dark:group-hover:bg-primary-900 group-hover:text-primary-500 dark:group-hover:text-primary-400 transition-colors">
+                                            <i class="fas fa-rocket text-xs"></i>
+                                        </div>
+                                    </div>
+                                    <span class="text-gray-600 dark:text-gray-300 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">增强帧评分机制，引入更多教育内容特定的评分因素</span>
+                                </div>
+                                <div class="group flex items-start">
+                                    <div class="flex-shrink-0 mt-1 mr-3">
+                                        <div class="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-400 group-hover:bg-primary-100 dark:group-hover:bg-primary-900 group-hover:text-primary-500 dark:group-hover:text-primary-400 transition-colors">
+                                            <i class="fas fa-rocket text-xs"></i>
+                                        </div>
+                                    </div>
+                                    <span class="text-gray-600 dark:text-gray-300 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">针对不同学科定制更精确的提示模板</span>
+                                </div>
+                                <div class="group flex items-start">
+                                    <div class="flex-shrink-0 mt-1 mr-3">
+                                        <div class="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-400 group-hover:bg-primary-100 dark:group-hover:bg-primary-900 group-hover:text-primary-500 dark:group-hover:text-primary-400 transition-colors">
+                                            <i class="fas fa-rocket text-xs"></i>
+                                        </div>
+                                    </div>
+                                    <span class="text-gray-600 dark:text-gray-300 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">改进上下文感知评估，考虑前后帧的关系进行综合判断</span>
+                                </div>
+                                <div class="group flex items-start">
+                                    <div class="flex-shrink-0 mt-1 mr-3">
+                                        <div class="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-400 group-hover:bg-primary-100 dark:group-hover:bg-primary-900 group-hover:text-primary-500 dark:group-hover:text-primary-400 transition-colors">
+                                            <i class="fas fa-rocket text-xs"></i>
+                                        </div>
+                                    </div>
+                                    <span class="text-gray-600 dark:text-gray-300 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">添加用户反馈机制</span>
+                                </div>
+                                <div class="group flex items-start">
+                                    <div class="flex-shrink-0 mt-1 mr-3">
+                                        <div class="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-400 group-hover:bg-primary-100 dark:group-hover:bg-primary-900 group-hover:text-primary-500 dark:group-hover:text-primary-400 transition-colors">
+                                            <i class="fas fa-rocket text-xs"></i>
+                                        </div>
+                                    </div>
+                                    <span class="text-gray-600 dark:text-gray-300 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">开发Web界面</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 前后对比 -->
+            <div class="mt-16 revealer">
+                <h3 class="text-2xl font-semibold mb-10 text-center text-gray-800 dark:text-gray-100">传统笔记 vs MetaNote</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700">
+                        <div class="h-16 bg-gray-100 dark:bg-gray-750 flex items-center px-6">
+                            <div class="w-3 h-3 rounded-full bg-red-500 mr-2"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500 mr-2"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
+                            <span class="ml-auto text-gray-500 dark:text-gray-400 text-sm">传统笔记</span>
+                        </div>
+                        <div class="p-6">
+                            <div class="mb-6">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
+                                    <i class="fas fa-times-circle mr-1"></i> 费时费力
+                                </span>
+                            </div>
+                            <div class="space-y-4 text-gray-600 dark:text-gray-300">
+                                <p>- 需要手动记录关键点</p>
+                                <p>- 可能错过重要内容</p>
+                                <p>- 难以同时关注讲解和记笔记</p>
+                                <p>- 笔记质量依赖于个人能力</p>
+                                <p>- 缺乏结构和系统性</p>
+                                <p>- 无法方便地添加图像</p>
+                                <p>- 回顾时可能难以理解上下文</p>
+                            </div>
+                            <div class="mt-10 pt-6 border-t border-gray-200 dark:border-gray-700 flex items-center justify-center">
+                                <div class="flex items-center">
+                                    <i class="fas fa-hourglass-half text-red-500 dark:text-red-400 text-3xl mr-3"></i>
+                                    <div>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">典型笔记时间</p>
+                                        <p class="text-xl font-bold text-gray-800 dark:text-gray-200">1小时视频 ≈ 1.5小时</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-lg overflow-hidden border border-primary-200 dark:border-primary-700 transform hover:scale-[1.02] transition-all">
+                        <div class="h-16 bg-gradient-to-r from-primary-500 to-accent-500 flex items-center px-6">
+                            <div class="w-3 h-3 rounded-full bg-white opacity-70 mr-2"></div>
+                            <div class="w-3 h-3 rounded-full bg-white opacity-70 mr-2"></div>
+                            <div class="w-3 h-3 rounded-full bg-white opacity-70 mr-2"></div>
+                            <span class="ml-auto text-white text-sm">MetaNote笔记</span>
+                        </div>
+                        <div class="p-6">
+                            <div class="mb-6">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-success-100 text-success-800 dark:bg-success-900 dark:text-success-200">
+                                    <i class="fas fa-check-circle mr-1"></i> 高效智能
+                                </span>
+                            </div>
+                            <div class="space-y-4 text-gray-600 dark:text-gray-300">
+                                <p>- 自动提取所有关键内容</p>
+                                <p>- 不会遗漏重要信息</p>
+                                <p>- 可完全专注于理解内容</p>
+                                <p>- AI驱动的高质量输出</p>
+                                <p>- 自动生成结构化笔记</p>
+                                <p>- 智能选择关键图像</p>
+                                <p>- 清晰的上下文和逻辑关系</p>
+                            </div>
+                            <div class="mt-10 pt-6 border-t border-gray-200 dark:border-gray-700 flex items-center justify-center">
+                                <div class="flex items-center">
+                                    <i class="fas fa-bolt text-success-500 dark:text-success-400 text-3xl mr-3"></i>
+                                    <div>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">自动处理时间</p>
+                                        <p class="text-xl font-bold text-gray-800 dark:text-gray-200">1小时视频 ≈ 10分钟</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 作者信息 - 精简版 -->
+<section class="py-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div class="absolute inset-0 z-0">
+        <div class="absolute inset-0 bg-gray-100 dark:bg-gray-800/50"></div>
+        <div class="absolute top-0 left-0 right-0 h-20 bg-white dark:bg-gray-900" style="clip-path: ellipse(75% 100% at 50% 0%)"></div>
+        <div class="absolute bottom-0 left-0 right-0 h-20 bg-white dark:bg-gray-900" style="clip-path: ellipse(75% 100% at 50% 100%)"></div>
+    </div>
+    
+    <div class="max-w-7xl mx-auto relative z-10">
+        <div class="text-center revealer">
+            <a href="https://github.com/Marstaos/MetaNote" target="_blank" class="btn-hover inline-flex items-center justify-center px-8 py-4 text-base font-medium rounded-xl shadow-xl text-white bg-gradient-to-r from-primary-500 to-accent-500 hover:from-primary-600 hover:to-accent-600 transition-all transform hover:scale-105">
+                <i class="fab fa-github mr-3 text-xl"></i> 在GitHub上支持项目
+            </a>
+        </div>
+    </div>
+</section>
+
+    <!-- CTA区域 -->
+    <section class="py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto relative z-10">
+            <div class="relative">
+                <!-- 背景光晕 -->
+                <div class="absolute inset-0 bg-gradient-to-r from-primary-500/20 to-accent-500/20 dark:from-primary-600/10 dark:to-accent-600/10 rounded-3xl filter blur-2xl transform rotate-3 scale-105"></div>
+                
+                <div class="relative bg-gradient-to-r from-primary-500 to-accent-500 rounded-3xl shadow-2xl overflow-hidden revealer">
+                    <div class="absolute inset-0 bg-pattern-dots opacity-10"></div>
+                    
+                    <!-- 形状装饰 -->
+                    <div class="absolute -top-24 -right-24 w-64 h-64 bg-white opacity-10 rounded-full"></div>
+                    <div class="absolute -bottom-32 -left-32 w-96 h-96 bg-white opacity-10 rounded-full"></div>
+                    
+                    <div class="relative p-10 md:p-16 text-center">
+                        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">开始把视频搞成笔记⬇️</h2>
+                        <p class="text-xl text-white/80 max-w-3xl mx-auto mb-10">
+                            开始使用MetaNote，让AI为您自动生成课程笔记，专注于真正的学习与理解
+                        </p>
+                        <div class="flex flex-col sm:flex-row justify-center gap-4">
+                            <a href="#getting-started" class="btn-hover inline-flex items-center justify-center px-8 py-4 text-lg font-medium rounded-xl shadow-xl text-primary-700 bg-white hover:bg-gray-100 transition-all transform">
+                                开始使用 <i class="fas fa-arrow-right ml-2"></i>
+                            </a>
+                            <a href="https://github.com/marstaos/metanote" class="btn-hover inline-flex items-center justify-center px-8 py-4 text-lg font-medium rounded-xl shadow-md border border-white/30 text-white hover:bg-white/10 transition-all">
+                                <i class="fab fa-github mr-2"></i> GitHub
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="pt-20 pb-10 px-4 sm:px-6 lg:px-8 bg-gray-900 text-gray-400">
+        <div class="max-w-7xl mx-auto">
+            <!-- 主要内容 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-16">
+                <!-- 网站信息 -->
+                <div>
+                    <div class="flex items-center space-x-2 mb-6">
+                        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-primary-400 to-accent-500 flex items-center justify-center text-white shadow-lg">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <span class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary-400 to-accent-400">MetaNote</span>
+                    </div>
+                    <p class="mb-6">MetaNote是一个智能笔记生成工具，用于从课程视频中自动提取关键内容，生成结构化Markdown笔记。</p>
+                </div>
+                
+                <!-- 快速链接 -->
+                <div>
+                    <h3 class="text-white text-lg font-semibold mb-6">快速链接</h3>
+                    <ul class="space-y-4">
+                        <li>
+                            <a href="#overview" class="inline-flex items-center text-gray-400 hover:text-primary-400 transition-colors">
+                                <i class="fas fa-chevron-right text-xs mr-2 text-primary-500"></i> 项目概述
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#features" class="inline-flex items-center text-gray-400 hover:text-primary-400 transition-colors">
+                                <i class="fas fa-chevron-right text-xs mr-2 text-primary-500"></i> 功能特点
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#how-it-works" class="inline-flex items-center text-gray-400 hover:text-primary-400 transition-colors">
+                                <i class="fas fa-chevron-right text-xs mr-2 text-primary-500"></i> 工作原理
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#demo" class="inline-flex items-center text-gray-400 hover:text-primary-400 transition-colors">
+                                <i class="fas fa-chevron-right text-xs mr-2 text-primary-500"></i> 效果展示
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#getting-started" class="inline-flex items-center text-gray-400 hover:text-primary-400 transition-colors">
+                                <i class="fas fa-chevron-right text-xs mr-2 text-primary-500"></i> 快速开始
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- 资源链接 -->
+                <div>
+                    <h3 class="text-white text-lg font-semibold mb-6">相关资源</h3>
+                    <ul class="space-y-4">
+                        <li>
+                            <a href="#" class="inline-flex items-center text-gray-400 hover:text-primary-400 transition-colors">
+                                <i class="fas fa-book text-xs mr-2 text-primary-500"></i> 使用文档
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="inline-flex items-center text-gray-400 hover:text-primary-400 transition-colors">
+                                <i class="fas fa-code-branch text-xs mr-2 text-primary-500"></i> 贡献指南
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="inline-flex items-center text-gray-400 hover:text-primary-400 transition-colors">
+                                <i class="fas fa-bug text-xs mr-2 text-primary-500"></i> 问题反馈
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="inline-flex items-center text-gray-400 hover:text-primary-400 transition-colors">
+                                <i class="fas fa-newspaper text-xs mr-2 text-primary-500"></i> 博客文章
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="inline-flex items-center text-gray-400 hover:text-primary-400 transition-colors">
+                                <i class="fas fa-download text-xs mr-2 text-primary-500"></i> 下载示例
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- 联系表单 -->
+                <div>
+                    <h3 class="text-white text-lg font-semibold mb-6">订阅更新</h3>
+                    <p class="mb-4">获取最新的功能更新和开发动态</p>
+                    <form class="mb-4">
+                        <div class="flex">
+                            <input type="email" placeholder="您的邮箱地址" class="px-4 py-2 rounded-l-lg bg-gray-800 border border-gray-700 text-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent w-full" />
+                            <button type="submit" class="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-r-lg transition-colors">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </form>
+                    <p class="text-sm">我们有点尊重您的隐私，可能不会分享您的邮箱地址。事实上这个你填了也没人看。</p>
+                </div>
+            </div>
+            
+            <!-- 版权信息 -->
+            <div class="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
+                <p>© 2025 MetaNote Project. Made with 💗 by Marstaos</p>
+                <div class="mt-4 md:mt-0 flex flex-wrap justify-center gap-4">
+                    <a href="#" class="text-gray-500 hover:text-gray-300 transition-colors">隐私政策</a>
+                    <a href="#" class="text-gray-500 hover:text-gray-300 transition-colors">使用条款</a>
+                    <a href="#" class="text-gray-500 hover:text-gray-300 transition-colors">许可协议</a>
+                    <a href="#" class="text-gray-500 hover:text-gray-300 transition-colors">安全</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 返回顶部按钮 -->
+    <button id="back-to-top" class="fixed bottom-8 right-8 w-14 h-14 rounded-full bg-gradient-to-r from-primary-500 to-accent-500 text-white shadow-lg flex items-center justify-center opacity-0 invisible transition-all duration-300 hover:scale-110 z-50">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- JavaScript 库 -->
+    <script src="https://cdn.jsdelivr.net/npm/@preline/plugin@1.0.0/dist/preline.js"></script>
+    
+    <script>
+        // 等待DOM加载完成
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化Swiper轮播
+            const featuresSwiper = new Swiper('.mySwiper', {
+                slidesPerView: 1,
+                spaceBetween: 30,
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                breakpoints: {
+                    640: {
+                        slidesPerView: 2,
+                        spaceBetween: 20,
+                    },
+                    1024: {
+                        slidesPerView: 3,
+                        spaceBetween: 30,
+                    },
+                },
+            });
+            
+            // 初始化用户反馈轮播
+            const testimonialsSwiper = new Swiper('.testimonialSwiper', {
+                slidesPerView: 1,
+                spaceBetween: 30,
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                autoplay: {
+                    delay: 5000,
+                    disableOnInteraction: false,
+                },
+                breakpoints: {
+                    768: {
+                        slidesPerView: 2,
+                        spaceBetween: 30,
+                    },
+                    1280: {
+                        slidesPerView: 3,
+                        spaceBetween: 30,
+                    },
+                },
+            });
+            
+            // 主题切换
+            const themeToggle = document.getElementById('theme-toggle');
+            const html = document.documentElement;
+            
+            // 检查本地存储或系统偏好
+            if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                html.classList.add('dark');
+            } else {
+                html.classList.remove('dark');
+            }
+            
+            // 切换主题
+            themeToggle.addEventListener('click', () => {
+                html.classList.toggle('dark');
+                localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+            });
+            
+            // 返回顶部按钮
+            const backToTopButton = document.getElementById('back-to-top');
+            
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    backToTopButton.classList.remove('opacity-0', 'invisible');
+                    backToTopButton.classList.add('opacity-100', 'visible');
+                } else {
+                    backToTopButton.classList.remove('opacity-100', 'visible');
+                    backToTopButton.classList.add('opacity-0', 'invisible');
+                }
+            });
+            
+            backToTopButton.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+            
+            // 导航栏滚动效果
+            const navbar = document.getElementById('navbar');
+            
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 50) {
+                    navbar.classList.add('bg-white/80', 'dark:bg-gray-800/80', 'backdrop-blur-md', 'shadow-lg');
+                    navbar.classList.remove('bg-transparent');
+                } else {
+                    navbar.classList.remove('bg-white/80', 'dark:bg-gray-800/80', 'backdrop-blur-md', 'shadow-lg');
+                    navbar.classList.add('bg-transparent');
+                }
+            });
+            
+            // 文档加载时触发一次滚动事件，以设置正确的导航栏状态
+            window.dispatchEvent(new Event('scroll'));
+            
+            // 3D网格背景
+            const heroBg = document.getElementById('hero-bg');
+            if (heroBg) {
+                createGrid();
+            }
+            
+            function createGrid() {
+                const width = window.innerWidth;
+                const height = window.innerHeight;
+                
+                // 创建SVG网格
+                const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                svg.setAttribute("width", "100%");
+                svg.setAttribute("height", "100%");
+                svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+                
+                const gridSize = 40;
+                const rows = Math.floor(height / gridSize);
+                const cols = Math.floor(width / gridSize);
+                
+                // 创建网格线
+                for (let i = 0; i <= rows; i++) {
+                    const y = i * gridSize;
+                    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                    line.setAttribute("x1", "0");
+                    line.setAttribute("y1", y);
+                    line.setAttribute("x2", width);
+                    line.setAttribute("y2", y);
+                    line.setAttribute("stroke", "currentColor");
+                    line.setAttribute("stroke-width", "0.5");
+                    line.setAttribute("opacity", "0.1");
+                    svg.appendChild(line);
+                }
+                
+                for (let i = 0; i <= cols; i++) {
+                    const x = i * gridSize;
+                    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                    line.setAttribute("x1", x);
+                    line.setAttribute("y1", "0");
+                    line.setAttribute("x2", x);
+                    line.setAttribute("y2", height);
+                    line.setAttribute("stroke", "currentColor");
+                    line.setAttribute("stroke-width", "0.5");
+                    line.setAttribute("opacity", "0.1");
+                    svg.appendChild(line);
+                }
+                
+                heroBg.appendChild(svg);
+                
+                // 添加鼠标移动效果
+                document.addEventListener('mousemove', (e) => {
+                    const mouseX = e.clientX / width;
+                    const mouseY = e.clientY / height;
+                    
+                    svg.style.transform = `translate(${mouseX * 20}px, ${mouseY * 20}px)`;
+                });
+            }
+            
+            // 添加打字机效果
+            const typingContainer = document.getElementById('typing-container');
+            if (typingContainer) {
+                const text = `# 数据结构与算法：二叉树遍历
+
+## 课程概要
+本节课介绍二叉树的三种主要遍历方式...
+
+## 前序遍历
+前序遍历的访问顺序是：根节点 -> 左子树 -> 右子树...
+
+![二叉树前序遍历示例](./images/image_01.jpg)
+
+\`\`\`python
+def preorder(root):
+    if root:
+        print(root.val)
+        preorder(root.left)
+        preorder(root.right)
+\`\`\``;
+                
+                let i = 0;
+                let typewriterEffect = setInterval(() => {
+                    if (i < text.length) {
+                        typingContainer.innerHTML += text.charAt(i);
+                        i++;
+                        typingContainer.scrollTop = typingContainer.scrollHeight;
+                    } else {
+                        clearInterval(typewriterEffect);
+                    }
+                }, 30);
+            }
+            
+            // GSAP动画
+            if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+                gsap.registerPlugin(ScrollTrigger);
+                
+                // 注册ScrollTrigger插件
+                gsap.config({
+                    autoSleep: 60,
+                    force3D: true
+                });
+                
+                // 初始化渐现动画
+                const revealers = document.querySelectorAll('.revealer');
+                revealers.forEach((revealer) => {
+                    gsap.fromTo(revealer, 
+                        { y: 50, opacity: 0 }, 
+                        { 
+                            y: 0, 
+                            opacity: 1, 
+                            duration: 1, 
+                            ease: "power3.out",
+                            scrollTrigger: {
+                                trigger: revealer,
+                                start: "top 80%",
+                                toggleActions: "play none none none"
+                            }
+                        }
+                    );
+                });
+                
+                // 初始化批量渐现动画
+                const revealerGroups = document.querySelectorAll('.revealer-group');
+                revealerGroups.forEach((group) => {
+                    const elements = group.querySelectorAll('.revealer');
+                    gsap.fromTo(elements, 
+                        { y: 50, opacity: 0 }, 
+                        { 
+                            y: 0, 
+                            opacity: 1, 
+                            duration: 1, 
+                            stagger: 0.15,
+                            ease: "power3.out",
+                            scrollTrigger: {
+                                trigger: group,
+                                start: "top 80%",
+                                toggleActions: "play none none none"
+                            }
+                        }
+                    );
+                });
+                
+                // 初始化进度条动画
+                gsap.to('.animate-bar-90', { width: '90%', duration: 1.5, ease: "power2.out", scrollTrigger: { trigger: '.animate-bar-90', start: "top 90%" } });
+                gsap.to('.animate-bar-95', { width: '95%', duration: 1.5, ease: "power2.out", scrollTrigger: { trigger: '.animate-bar-95', start: "top 90%" } });
+                gsap.to('.animate-bar-80', { width: '80%', duration: 1.5, ease: "power2.out", scrollTrigger: { trigger: '.animate-bar-80', start: "top 90%" } });
+                gsap.to('.animate-bar-75', { width: '75%', duration: 1.5, ease: "power2.out", scrollTrigger: { trigger: '.animate-bar-75', start: "top 90%" } });
+                
+                // 初始化流程图动画
+                const steps = document.querySelectorAll('.process-step');
+                steps.forEach((step, index) => {
+                    gsap.fromTo(step, 
+                        { y: 50, opacity: 0 }, 
+                        { 
+                            y: 0, 
+                            opacity: 1, 
+                            duration: 1, 
+                            delay: index * 0.2,
+                            ease: "power3.out",
+                            scrollTrigger: {
+                                trigger: step,
+                                start: "top 80%",
+                                toggleActions: "play none none none"
+                            }
+                        }
+                    );
+                });
+                
+                // 初始化使用步骤动画
+                const startSteps = document.querySelectorAll('.start-step');
+                startSteps.forEach((step, index) => {
+                    gsap.fromTo(step, 
+                        { opacity: 0, x: index % 2 === 0 ? -50 : 50 }, 
+                        { 
+                            opacity: 1, 
+                            x: 0,
+                            duration: 1, 
+                            ease: "power3.out",
+                            scrollTrigger: {
+                                trigger: step,
+                                start: "top 80%",
+                                toggleActions: "play none none none"
+                            }
+                        }
+                    );
+                });
+                
+                // 架构图动画
+                const architectureNodes = document.querySelectorAll('.architecture-node');
+                architectureNodes.forEach((node, index) => {
+                    gsap.fromTo(node, 
+                        { scale: 0.8, opacity: 0 }, 
+                        { 
+                            scale: 1, 
+                            opacity: 1, 
+                            duration: 0.6, 
+                            delay: index * 0.2,
+                            ease: "back.out(1.7)",
+                            scrollTrigger: {
+                                trigger: '#architecture-diagram',
+                                start: "top 60%",
+                                toggleActions: "play none none none"
+                            }
+                        }
+                    );
+                });
+                
+                // 创建架构图连接线
+                const architectureSvg = document.getElementById('architecture-svg');
+                if (architectureSvg) {
+                    setTimeout(() => {
+                        const nodes = document.querySelectorAll('.architecture-node');
+                        if (nodes.length >= 6) {
+                            // 主节点到ASR和帧提取节点的连接线
+                            drawSvgLine(architectureSvg, nodes[0], nodes[1], '#3B82F6');
+                            drawSvgLine(architectureSvg, nodes[0], nodes[2], '#8B5CF6');
+                            
+                            // ASR和帧提取节点到图像理解和内容整合的连接线
+                            drawSvgLine(architectureSvg, nodes[1], nodes[3], '#3B82F6');
+                            drawSvgLine(architectureSvg, nodes[2], nodes[4], '#8B5CF6');
+                            
+                            // 图像理解和内容整合到笔记生成的连接线
+                            drawSvgLine(architectureSvg, nodes[3], nodes[5], '#3B82F6');
+                            drawSvgLine(architectureSvg, nodes[4], nodes[5], '#8B5CF6');
+                        }
+                    }, 1500);
+                }
+                
+                // 创建价值评估流程图
+                const valueProcessDiagram = document.getElementById('value-process-diagram');
+                if (valueProcessDiagram) {
+                    setTimeout(() => {
+                        createValueProcessDiagram();
+                    }, 1000);
+                }
+            }
+            
+            // 帮助函数：绘制SVG连接线
+            function drawSvgLine(svg, startNode, endNode, color) {
+                const startRect = startNode.getBoundingClientRect();
+                const endRect = endNode.getBoundingClientRect();
+                
+                const svgRect = svg.getBoundingClientRect();
+                
+                const startX = (startRect.left + startRect.right) / 2 - svgRect.left;
+                const startY = (startRect.top + startRect.bottom) / 2 - svgRect.top;
+                const endX = (endRect.left + endRect.right) / 2 - svgRect.left;
+                const endY = (endRect.top + endRect.bottom) / 2 - svgRect.top;
+                
+                const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                
+                // 创建曲线路径
+                const dx = Math.abs(endX - startX) * 0.3;
+                let d = `M${startX},${startY} C${startX + dx},${startY} ${endX - dx},${endY} ${endX},${endY}`;
+                
+                path.setAttribute("d", d);
+                path.setAttribute("stroke", color);
+                path.setAttribute("stroke-width", "2");
+                path.setAttribute("fill", "none");
+                path.setAttribute("stroke-dasharray", "5,5");
+                
+                // 添加动画效果
+                const length = path.getTotalLength();
+                path.setAttribute("stroke-dasharray", length);
+                path.setAttribute("stroke-dashoffset", length);
+                
+                const anim = document.createElementNS("http://www.w3.org/2000/svg", "animate");
+                anim.setAttribute("attributeName", "stroke-dashoffset");
+                anim.setAttribute("from", length);
+                anim.setAttribute("to", "0");
+                anim.setAttribute("dur", "1.5s");
+                anim.setAttribute("fill", "freeze");
+                
+                path.appendChild(anim);
+                svg.appendChild(path);
+                
+                // 添加箭头
+                const marker = document.createElementNS("http://www.w3.org/2000/svg", "marker");
+                marker.setAttribute("id", "arrowhead-" + Math.random().toString(36).substr(2, 9));
+                marker.setAttribute("markerWidth", "10");
+                marker.setAttribute("markerHeight", "7");
+                marker.setAttribute("refX", "10");
+                marker.setAttribute("refY", "3.5");
+                marker.setAttribute("orient", "auto");
+                
+                const polygon = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+                polygon.setAttribute("points", "0 0, 10 3.5, 0 7");
+                polygon.setAttribute("fill", color);
+                
+                marker.appendChild(polygon);
+                svg.appendChild(marker);
+                
+                path.setAttribute("marker-end", `url(#${marker.getAttribute("id")})`);
+            }
+            
+            // 创建价值评估流程图
+            function createValueProcessDiagram() {
+                const container = document.getElementById('value-process-diagram');
+                if (!container) return;
+                
+                // 创建SVG元素
+                const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                svg.setAttribute("width", "100%");
+                svg.setAttribute("height", "100%");
+                svg.setAttribute("viewBox", "0 0 1000 300");
+                container.appendChild(svg);
+                
+                // 定义节点位置
+                const nodes = [
+                    { id: 'input', x: 100, y: 150, radius: 40, color: '#3B82F6', icon: 'video', label: '输入视频' },
+                    { id: 'extract', x: 250, y: 150, radius: 40, color: '#8B5CF6', icon: 'film', label: '提取候选帧' },
+                    { id: 'filter', x: 400, y: 150, radius: 40, color: '#EC4899', icon: 'filter', label: '初步筛选' },
+                    { id: 'analyze', x: 550, y: 150, radius: 40, color: '#10B981', icon: 'brain', label: 'AI评估' },
+                    { id: 'rank', x: 700, y: 150, radius: 40, color: '#F59E0B', icon: 'sort-amount-up', label: '价值排序' },
+                    { id: 'select', x: 850, y: 150, radius: 40, color: '#3B82F6', icon: 'check-circle', label: '最终选择' }
+                ];
+                
+                // 绘制连接线
+                for (let i = 0; i < nodes.length - 1; i++) {
+                    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                    line.setAttribute("x1", nodes[i].x + nodes[i].radius);
+                    line.setAttribute("y1", nodes[i].y);
+                    line.setAttribute("x2", nodes[i + 1].x - nodes[i + 1].radius);
+                    line.setAttribute("y2", nodes[i + 1].y);
+                    line.setAttribute("stroke", "url(#gradient-" + i + ")");
+                    line.setAttribute("stroke-width", "3");
+                    line.setAttribute("marker-end", "url(#arrowhead)");
+                    
+                    // 添加渐变
+                    const gradient = document.createElementNS("http://www.w3.org/2000/svg", "linearGradient");
+                    gradient.setAttribute("id", "gradient-" + i);
+                    gradient.setAttribute("x1", "0%");
+                    gradient.setAttribute("y1", "0%");
+                    gradient.setAttribute("x2", "100%");
+                    gradient.setAttribute("y2", "0%");
+                    
+                    const stop1 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+                    stop1.setAttribute("offset", "0%");
+                    stop1.setAttribute("stop-color", nodes[i].color);
+                    
+                    const stop2 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+                    stop2.setAttribute("offset", "100%");
+                    stop2.setAttribute("stop-color", nodes[i + 1].color);
+                    
+                    gradient.appendChild(stop1);
+                    gradient.appendChild(stop2);
+                    
+                    const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+                    defs.appendChild(gradient);
+                    svg.appendChild(defs);
+                    
+                    // 给线条添加动画
+                    line.setAttribute("stroke-dasharray", "5,5");
+                    line.setAttribute("opacity", "0");
+                    
+                    const animateOpacity = document.createElementNS("http://www.w3.org/2000/svg", "animate");
+                    animateOpacity.setAttribute("attributeName", "opacity");
+                    animateOpacity.setAttribute("from", "0");
+                    animateOpacity.setAttribute("to", "1");
+                    animateOpacity.setAttribute("dur", "0.5s");
+                    animateOpacity.setAttribute("fill", "freeze");
+                    animateOpacity.setAttribute("begin", i * 0.3 + "s");
+                    
+                    line.appendChild(animateOpacity);
+                    svg.appendChild(line);
+                }
+                
+                // 添加箭头标记
+                const marker = document.createElementNS("http://www.w3.org/2000/svg", "marker");
+                marker.setAttribute("id", "arrowhead");
+                marker.setAttribute("markerWidth", "10");
+                marker.setAttribute("markerHeight", "7");
+                marker.setAttribute("refX", "10");
+                marker.setAttribute("refY", "3.5");
+                marker.setAttribute("orient", "auto");
+                
+                const polygon = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+                polygon.setAttribute("points", "0 0, 10 3.5, 0 7");
+                polygon.setAttribute("fill", "#64748B");
+                
+                marker.appendChild(polygon);
+                
+                const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+                defs.appendChild(marker);
+                svg.appendChild(defs);
+                
+                // 绘制节点
+                nodes.forEach((node, index) => {
+                    const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                    group.setAttribute("opacity", "0");
+                    
+                    // 节点圆
+                    const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                    circle.setAttribute("cx", node.x);
+                    circle.setAttribute("cy", node.y);
+                    circle.setAttribute("r", node.radius);
+                    circle.setAttribute("fill", "url(#node-gradient-" + index + ")");
+                    circle.setAttribute("stroke", "#ffffff");
+                    circle.setAttribute("stroke-width", "2");
+                    
+                    // 节点渐变
+                    const nodeGradient = document.createElementNS("http://www.w3.org/2000/svg", "radialGradient");
+                    nodeGradient.setAttribute("id", "node-gradient-" + index);
+                    nodeGradient.setAttribute("cx", "0.5");
+                    nodeGradient.setAttribute("cy", "0.5");
+                    nodeGradient.setAttribute("r", "0.5");
+                    nodeGradient.setAttribute("fx", "0.4");
+                    nodeGradient.setAttribute("fy", "0.4");
+                    
+                    const nodeStop1 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+                    nodeStop1.setAttribute("offset", "0%");
+                    nodeStop1.setAttribute("stop-color", node.color);
+                    
+                    const nodeStop2 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+                    nodeStop2.setAttribute("offset", "100%");
+                    nodeStop2.setAttribute("stop-color", shadeColor(node.color, -30));
+                    
+                    nodeGradient.appendChild(nodeStop1);
+                    nodeGradient.appendChild(nodeStop2);
+                    
+                    const nodeDefs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+                    nodeDefs.appendChild(nodeGradient);
+                    svg.appendChild(nodeDefs);
+                    
+                    // 节点图标 (简化表示)
+                    const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                    text.setAttribute("x", node.x);
+                    text.setAttribute("y", node.y);
+                    text.setAttribute("text-anchor", "middle");
+                    text.setAttribute("dominant-baseline", "middle");
+                    text.setAttribute("font-family", "FontAwesome");
+                    text.setAttribute("font-size", "20");
+                    text.setAttribute("fill", "#ffffff");
+                    
+                    // 简单图标映射
+                    const iconMap = {
+                        'video': '\uf03d',
+                        'film': '\uf008',
+                        'filter': '\uf0b0',
+                        'brain': '\uf5dc',
+                        'sort-amount-up': '\uf161',
+                        'check-circle': '\uf058'
+                    };
+                    
+                    text.textContent = iconMap[node.icon] || '\uf013';
+                    
+                    // 节点标签
+                    const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                    label.setAttribute("x", node.x);
+                    label.setAttribute("y", node.y + node.radius + 20);
+                    label.setAttribute("text-anchor", "middle");
+                    label.setAttribute("font-family", "Arial, sans-serif");
+                    label.setAttribute("font-size", "14");
+                    label.setAttribute("fill", "currentColor");
+                    label.textContent = node.label;
+                    
+                    group.appendChild(circle);
+                    group.appendChild(text);
+                    group.appendChild(label);
+                    
+                    // 添加节点动画
+                    const animateScale = document.createElementNS("http://www.w3.org/2000/svg", "animate");
+                    animateScale.setAttribute("attributeName", "opacity");
+                    animateScale.setAttribute("from", "0");
+                    animateScale.setAttribute("to", "1");
+                    animateScale.setAttribute("dur", "0.5s");
+                    animateScale.setAttribute("fill", "freeze");
+                    animateScale.setAttribute("begin", index * 0.3 + "s");
+                    
+                    group.appendChild(animateScale);
+                    svg.appendChild(group);
+                });
+            }
+            
+            // 颜色调整辅助函数
+            function shadeColor(color, percent) {
+                let R = parseInt(color.substring(1, 3), 16);
+                let G = parseInt(color.substring(3, 5), 16);
+                let B = parseInt(color.substring(5, 7), 16);
+                
+                R = parseInt(R * (100 + percent) / 100);
+                G = parseInt(G * (100 + percent) / 100);
+                B = parseInt(B * (100 + percent) / 100);
+                
+                R = (R < 255) ? R : 255;
+                G = (G < 255) ? G : 255;
+                B = (B < 255) ? B : 255;
+                
+                R = Math.round(R);
+                G = Math.round(G);
+                B = Math.round(B);
+                
+                const RR = ((R.toString(16).length == 1) ? "0" + R.toString(16) : R.toString(16));
+                const GG = ((G.toString(16).length == 1) ? "0" + G.toString(16) : G.toString(16));
+                const BB = ((B.toString(16).length == 1) ? "0" + B.toString(16) : B.toString(16));
+                
+                return "#" + RR + GG + BB;
+            }
+        });
+    </script>
+</body>
+</html>
