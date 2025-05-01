@@ -21,3 +21,7 @@ openai>=1.3.0  # 用于千问API
 # 视频处理
 ffmpeg-python>=0.2.0
 python-multipart
+
+# UI requirements
+streamlit>=1.26.0
+watchdog>=3.0.0

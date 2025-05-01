@@ -1,49 +1,30 @@
-# MetaNote 配置文件
-
-# 输出目录设置
-output_dir: "output"  # 生成的笔记和资源的输出目录
-temp_dir: "temp"      # 临时文件目录
-
-# ASR配置
 asr:
-  server_url: "http://localhost:8000"  # ASR服务器URL
-  model_path: "MetaNote/models/SenseVoiceSmall"  # 修改这里！本地模型路径
-  device: "cuda:0"  # 运行设备
-
-# 视频处理配置
-video:
-  sample_rate: 1       # 每秒采样的帧数
-  stable_duration: 3   # 定义内容稳定的最小持续秒数
-  scene_threshold: 0.3 # 场景切换检测的阈值 (0-1)
-  parallel_requests: 2 # 并行处理图像的线程数
-
-# 图像理解配置
+  device: cuda:0
+  model_path: /path/to/SenseVoiceSmall
+  server_url: http://localhost:13689
 image_understanding:
-  provider: "qwen"   # 使用的图像理解服务: "ollama" 或 "qwen"
-  
-  # Ollama配置
   ollama:
-    url: "http://localhost:11434/api/generate"
-    model: "llava:13b"
-  
-  # 千问配置 
+    model: llava:13b
+    url: http://localhost:11434/api/generate
+  provider: qwen
   qwen:
-    api_key: "sk-xxx"  # 千问API密钥
-    base_url: "https://dashscope.aliyuncs.com/compatible-mode/v1"
-    model: "qwen-vl-plus"
-
-# 笔记生成配置
-note_generator:
-  provider: "qwen"
-  
-  # 千问配置
-  qwen:
-    api_key: "sk-xxx"  # 千问API密钥
-    base_url: "https://dashscope.aliyuncs.com/compatible-mode/v1"
-    model: "qwen-plus"
-    system_prompt: "你是一位专业的教育内容编辑，擅长将课程视频的文字记录和图像整理成结构化的学习笔记。"
-
-# 日志配置
+    api_key: sk-xxx
+    base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
+    model: qwen-vl-plus
 logging:
-  level: "INFO"      # 日志级别: DEBUG, INFO, WARNING, ERROR, CRITICAL
-  file: "metanote.log"  # 日志文件
+  file: metanote.log
+  level: INFO
+note_generator:
+  provider: qwen
+  qwen:
+    api_key: sk-xxx
+    base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
+    model: qwen-plus
+    system_prompt: 你是一位专业的教育内容编辑，擅长将课程视频的文字记录和图像整理成结构化的学习笔记。
+output_dir: output
+temp_dir: temp
+video:
+  parallel_requests: 2
+  sample_rate: 1
+  scene_threshold: 0.3
+  stable_duration: 3
