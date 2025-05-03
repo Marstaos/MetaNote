@@ -29,10 +29,281 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS
+# Custom CSS with enhanced styling
 st.markdown("""
 <style>
-    /* 保持原有样式不变 */
+    /* Modern styling for the entire app */
+    .main {
+        background-color: #f8fafc;
+        color: #1e293b;
+    }
+    
+    [data-testid="stSidebar"] {
+        background-color: #f1f5f9;
+        border-right: 1px solid #e2e8f0;
+    }
+    
+    /* Stylish header with gradient */
+    .logo-container {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+    
+    .logo-icon {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #0ea5e9 0%, #8b5cf6 100%);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 24px;
+        box-shadow: 0 4px 6px -1px rgba(14, 165, 233, 0.2);
+        margin-right: 15px;
+    }
+    
+    .logo-text {
+        font-size: 32px;
+        font-weight: 700;
+        background: linear-gradient(to right, #0ea5e9, #8b5cf6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: gradient 3s ease infinite;
+        background-size: 200% auto;
+        letter-spacing: -0.5px;
+    }
+    
+    @keyframes gradient {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    
+    .subtitle {
+        font-size: 16px;
+        color: #64748b;
+        margin-top: -5px;
+    }
+    
+    /* Step indicators in sidebar */
+    .sidebar-steps {
+        margin: 20px 0 30px 0;
+        position: relative;
+    }
+    
+    /* Hide the default streamlit button styling */
+    .sidebar-steps button[kind="secondary"] {
+        background-color: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        color: transparent !important;
+        position: absolute !important;
+        width: 100% !important;
+        height: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        top: 0 !important;
+        left: 0 !important;
+        z-index: 10 !important;
+    }
+    
+    /* Make stButton container position relative for absolute positioning */
+    .sidebar-steps .stButton {
+        position: relative !important;
+        margin-bottom: 15px !important;
+    }
+    
+    .step {
+        display: flex;
+        align-items: center;
+        padding: 10px 15px;
+        margin-bottom: 15px;
+        border-radius: 10px;
+        transition: all 0.3s;
+        position: relative;
+        color: #64748b;
+        background-color: rgba(255, 255, 255, 0.7);
+        border: 1px solid #e2e8f0;
+        cursor: pointer;
+        z-index: 1;
+    }
+    
+    .step:hover {
+        background-color: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+    }
+    
+    .step.active {
+        background-color: white;
+        color: #0ea5e9;
+        border-color: #0ea5e9;
+        box-shadow: 0 4px 6px -1px rgba(14, 165, 233, 0.1);
+    }
+    
+    .step-number {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background-color: #e2e8f0;
+        color: #64748b;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        margin-right: 12px;
+        flex-shrink: 0;
+        transition: all 0.3s;
+    }
+    
+    .step.active .step-number {
+        background-color: #0ea5e9;
+        color: white;
+    }
+    
+    .step.completed .step-number {
+        background-color: #10b981;
+        color: white;
+    }
+    
+    .step-content {
+        flex-grow: 1;
+    }
+    
+    .step-title {
+        font-weight: 600;
+        font-size: 16px;
+        display: block;
+    }
+    
+    .step-description {
+        font-size: 12px;
+        opacity: 0.8;
+    }
+    
+    /* Vertical connector line between steps */
+    .connector-line {
+        position: absolute;
+        top: 25px;
+        left: 30px;
+        width: 2px;
+        height: calc(100% - 50px);
+        background-color: #e2e8f0;
+        z-index: 0;
+    }
+    
+    /* Status indicators */
+    .status-running {
+        color: #10b981;
+        font-weight: 600;
+    }
+    
+    .status-stopped {
+        color: #ef4444;
+        font-weight: 600;
+    }
+    
+    /* Cards for content sections */
+    .content-card {
+        background-color: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        border: 1px solid #e2e8f0;
+    }
+    
+    .card-title {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #f1f5f9;
+        color: #0f172a;
+    }
+    
+    /* Buttons styling */
+    .stButton>button {
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.2s;
+    }
+    
+    /* Progress bar */
+    .stProgress > div > div > div {
+        background-color: #0ea5e9;
+    }
+    
+    /* Make expanders more modern */
+    .streamlit-expanderHeader {
+        font-weight: 600;
+        color: #0f172a;
+        background-color: #f8fafc;
+        border-radius: 8px;
+    }
+    
+    /* Code block styling */
+    .stCodeBlock {
+        border-radius: 8px;
+    }
+    
+    /* Override for dark mode */
+    @media (prefers-color-scheme: dark) {
+        .main {
+            background-color: #0f172a;
+            color: #e2e8f0;
+        }
+        
+        [data-testid="stSidebar"] {
+            background-color: #1e293b;
+            border-right: 1px solid #334155;
+        }
+        
+        .subtitle {
+            color: #94a3b8;
+        }
+        
+        .step {
+            background-color: rgba(30, 41, 59, 0.7);
+            border: 1px solid #334155;
+            color: #cbd5e1;
+        }
+        
+        .step:hover {
+            background-color: rgba(30, 41, 59, 0.9);
+        }
+        
+        .step.active {
+            background-color: #1e293b;
+        }
+        
+        .step-number {
+            background-color: #334155;
+            color: #cbd5e1;
+        }
+        
+        .connector-line {
+            background-color: #334155;
+        }
+        
+        .content-card {
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+        }
+        
+        .card-title {
+            border-bottom: 1px solid #334155;
+            color: #f1f5f9;
+        }
+        
+        .streamlit-expanderHeader {
+            color: #f1f5f9;
+            background-color: #1e293b;
+        }
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -307,11 +578,15 @@ if 'asr_server_url' not in st.session_state:
 # UI Components
 def render_header():
     """Render the application header"""
-    col1, col2, col3 = st.columns([1, 3, 1])
-    
-    with col2:
-        st.markdown('<div class="logo-text">MetaNote</div>', unsafe_allow_html=True)
-        st.markdown('<div class="subtitle">课程视频自动笔记生成工具</div>', unsafe_allow_html=True)
+    st.markdown('''
+    <div class="logo-container">
+        <div class="logo-icon">📝</div>
+        <div>
+            <div class="logo-text">MetaNote</div>
+            <div class="subtitle">课程视频自动笔记生成工具</div>
+        </div>
+    </div>
+    ''', unsafe_allow_html=True)
 
 def render_config_section():
     """Render the configuration section"""
@@ -602,32 +877,36 @@ def render_asr_server_section():
     )
     
     # 状态显示
-    col1, col2 = st.columns([3, 1])
-    with col1:
-        st.markdown(f"​**服务状态:​**​ <span class='{status_class}'>{status_text}</span>", unsafe_allow_html=True)
-        if st.session_state.asr['url']:
-            st.markdown(f"​**服务地址:​**​ `{normalize_server_url(st.session_state.asr['url'])}`")
-    
-    with col2:
-        if st.session_state.asr['status'] in ["stopped", "error"]:
-            if st.button("🚀 启动服务", use_container_width=True):
-                config = st.session_state.config
-                model_path = config.get("asr", {}).get("model_path", "")
-                if not model_path:
-                    st.error("请先配置模型路径")
-                else:
-                    server_url = config.get("asr", {}).get("server_url", "http://localhost:8000")
-                    host, port = extract_host_port_from_url(server_url)
-                    start_asr_server_subprocess(model_path, 
-                                               config.get("asr", {}).get("device", "cuda:0"),
-                                               host, port)
-        else:
-            if st.button("🛑 停止服务", use_container_width=True):
-                stop_asr_server()
+    with st.container():
+        st.markdown('<div class="content-card">', unsafe_allow_html=True)
+        col1, col2 = st.columns([3, 1])
+        with col1:
+            st.markdown(f"​**服务状态:​**​ <span class='{status_class}'>{status_text}</span>", unsafe_allow_html=True)
+            if st.session_state.asr['url']:
+                st.markdown(f"​**服务地址:​**​ `{normalize_server_url(st.session_state.asr['url'])}`")
+        
+        with col2:
+            if st.session_state.asr['status'] in ["stopped", "error"]:
+                if st.button("🚀 启动服务", use_container_width=True):
+                    config = st.session_state.config
+                    model_path = config.get("asr", {}).get("model_path", "")
+                    if not model_path:
+                        st.error("请先配置模型路径")
+                    else:
+                        server_url = config.get("asr", {}).get("server_url", "http://localhost:8000")
+                        host, port = extract_host_port_from_url(server_url)
+                        start_asr_server_subprocess(model_path, 
+                                                   config.get("asr", {}).get("device", "cuda:0"),
+                                                   host, port)
+            else:
+                if st.button("🛑 停止服务", use_container_width=True):
+                    stop_asr_server()
+        st.markdown('</div>', unsafe_allow_html=True)
     
     # 日志显示
     if st.session_state.asr['log_file']:
         with st.expander("服务日志", expanded=True):
+            st.markdown('<div class="content-card">', unsafe_allow_html=True)
             if st.button("刷新日志"):
                 pass
             
@@ -637,6 +916,7 @@ def render_asr_server_section():
                     st.code("".join(lines), language="log")
             except Exception as e:
                 st.error(f"读取日志失败: {str(e)}")
+            st.markdown('</div>', unsafe_allow_html=True)
 
 # 修改处理视频部分的检查逻辑
 def render_process_section():
@@ -644,6 +924,7 @@ def render_process_section():
     
     is_asr_ready = st.session_state.asr['status'] == "running"
     
+    st.markdown('<div class="content-card">', unsafe_allow_html=True)
     if not is_asr_ready:
         st.warning("ASR服务未就绪，请先启动服务")
     else:
@@ -653,12 +934,14 @@ def render_process_section():
     config = st.session_state.config
     asr_url = st.session_state.asr.get('url') or config.get("asr", {}).get("server_url", "http://localhost:8000")
     st.info(f"将使用 ASR 服务: {asr_url}")
+    st.markdown('</div>', unsafe_allow_html=True)
     
     # Tabs for single/batch processing
     tab1, tab2 = st.tabs(["单个视频处理", "批量处理"])
     
     with tab1:
         st.subheader("处理单个视频")
+        st.markdown('<div class="content-card">', unsafe_allow_html=True)
         
         uploaded_file = st.file_uploader("上传视频文件", type=["mp4", "avi", "mov", "mkv", "webm"])
         video_path = st.text_input("或输入视频文件路径", placeholder="/path/to/video.mp4")
@@ -733,9 +1016,11 @@ def render_process_section():
                 st.session_state.processing_status = "idle"
             else:
                 st.error("请选择有效的视频文件！")
+        st.markdown('</div>', unsafe_allow_html=True)
     
     with tab2:
         st.subheader("批量处理视频")
+        st.markdown('<div class="content-card">', unsafe_allow_html=True)
         
         directory = st.text_input("视频目录路径", placeholder="/path/to/videos/folder")
         recursive = st.checkbox("递归处理子目录", value=False)
@@ -780,6 +1065,7 @@ def render_process_section():
                     st.warning(f"⚠️ 在目录中未找到视频文件: {directory}")
             else:
                 st.error(f"❌ 目录不存在: {directory}")
+        st.markdown('</div>', unsafe_allow_html=True)
 
 def render_results_section():
     """Render the results section"""
@@ -787,8 +1073,10 @@ def render_results_section():
     
     results = st.session_state.processing_results
     
+    st.markdown('<div class="content-card">', unsafe_allow_html=True)
     if not results:
         st.info("暂无处理结果。请在\"处理视频\"选项卡中处理视频。")
+        st.markdown('</div>', unsafe_allow_html=True)
         return
     
     # Display each result
@@ -811,15 +1099,94 @@ def render_results_section():
                         st.error(f"无法加载笔记: {str(e)}")
             else:
                 st.markdown(f"**错误:** {result.get('error', '未知错误')}")
+    st.markdown('</div>', unsafe_allow_html=True)
 
 def main():
     """Main application function"""
     render_header()
     
-    # Main navigation
-    st.sidebar.title("导航")
-    pages = ["配置设置", "ASR 服务管理", "处理视频", "处理结果"]
-    selection = st.sidebar.radio("选择页面", pages, index=st.session_state.current_tab)
+    # Main navigation with step indicators as functional buttons
+    st.sidebar.markdown('<div class="sidebar-steps">', unsafe_allow_html=True)
+    
+    # Vertical connector line
+    st.sidebar.markdown('<div class="connector-line"></div>', unsafe_allow_html=True)
+    
+    # Define steps
+    steps = [
+        {
+            "id": "配置设置", 
+            "number": "1", 
+            "title": "配置设置", 
+            "description": "设置系统参数和模型选项",
+            "icon": "cog"
+        },
+        {
+            "id": "ASR 服务管理", 
+            "number": "2", 
+            "title": "ASR 服务管理", 
+            "description": "启动和监控语音识别服务",
+            "icon": "server"
+        },
+        {
+            "id": "处理视频", 
+            "number": "3", 
+            "title": "处理视频", 
+            "description": "上传或选择要处理的视频",
+            "icon": "film"
+        },
+        {
+            "id": "处理结果", 
+            "number": "4", 
+            "title": "处理结果", 
+            "description": "查看生成的笔记和处理报告",
+            "icon": "clipboard-check"
+        }
+    ]
+    
+    # For each step, create a clickable button with styled appearance
+    col1, col2 = st.sidebar.columns([1, 20])
+    with col1:
+        # Empty column to align with the connector line
+        pass
+    
+    with col2:
+        for i, step in enumerate(steps):
+            # Determine if this step is the current one
+            is_active = st.session_state.current_tab == i
+            is_completed = st.session_state.current_tab > i
+            
+            # Apply appropriate styling class
+            if is_active:
+                button_class = "active"
+            elif is_completed:
+                button_class = "completed"
+            else:
+                button_class = ""
+            
+            # Create a container for each step with a button
+            with st.container():
+                # Visual appearance of the step
+                st.markdown(f'''
+                <div class="step {button_class}">
+                    <div class="step-number">{step["number"]}</div>
+                    <div class="step-content">
+                        <span class="step-title">{step["title"]}</span>
+                        <span class="step-description">{step["description"]}</span>
+                    </div>
+                </div>
+                ''', unsafe_allow_html=True)
+                
+                # Since we can't overlay a button directly in Streamlit,
+                # we'll use an empty space with the same height and make it clickable
+                if st.button("选择此步骤", key=f"nav_{step['id']}", use_container_width=True, 
+                            help=f"转到: {step['title']} - {step['description']}"):
+                    st.session_state.current_tab = i
+                    st.rerun()
+    
+    # Get current selection based on tab index
+    selection = steps[st.session_state.current_tab]["id"]
+    
+    st.sidebar.markdown('</div>', unsafe_allow_html=True)
     
     st.sidebar.markdown("---")
     st.sidebar.info(
@@ -828,12 +1195,10 @@ def main():
         "\n1. 在配置设置中设置好参数"
         "\n2. 启动 ASR 服务"
         "\n3. 选择视频进行处理"
+        "\n4. 查看和保存生成的笔记"
     )
     
-    # Store current tab
-    st.session_state.current_tab = pages.index(selection)
-    
-    # Render selected page
+    # Render selected page based on current tab
     if selection == "配置设置":
         render_config_section()
     elif selection == "ASR 服务管理":
