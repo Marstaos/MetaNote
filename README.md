@@ -1,74 +1,99 @@
 # MetaNote：课程视频自动笔记生成工具
 
 听网课听完就忘了，懒得自己做笔记，但是后面又想找回来复习看看，如果又去看视频，很难精准找到知识点，太降低效率。
-MetaNote 是一个简单而强大的工具，能够从课程视频中自动生成带有关键图像的结构化 Markdown 笔记。它帮你搞定网课笔记。
+MetaNote 是一个简单而强大的工具，能够从课程视频中自动生成带有关键图像的结构化 Markdown 笔记。
+它帮你搞定网课笔记。
 
 ## 功能特点
 
-- **自动语音识别**：使用 FunASR 高精度转录视频中的语音内容
-- **智能关键帧提取**：基于场景变化和内容稳定性分析，提取最有价值的画面，收纳作为笔记配图
-- **多模态理解**：支持使用本地 Ollama 或阿里云千问多模态模型理解图像内容
-- **结构化笔记生成**：自动整合文本和图像，生成格式清晰的 Markdown 笔记
+- **（新！）便捷的图形化界面**：提供基于 Streamlit 的图形化操作界面，简化使用流程，无需命令行操作经验。
+- **自动语音识别**：使用 FunASR 高精度转录视频中的语音内容。
+- **智能关键帧提取**：基于场景变化和内容稳定性分析，提取最有价值的画面，收纳作为笔记配图。
+- **多模态理解**：支持使用本地 Ollama 或阿里云千问多模态模型理解图像内容。
+- **结构化笔记生成**：自动整合文本和图像，生成格式清晰的 Markdown 笔记。
 
 ## 快速开始
 
-### 下载ASR模型
-参照FunASR文档，前往魔搭社区下载模型：https://www.modelscope.cn/models/iic/SenseVoiceSmall
-下载完成后，将模型文件路径填充至config.yaml
+### 环境准备
 
-### 安装
-
+1.  **克隆项目**
+    
 ```bash
-# 克隆项目
-git clone https://github.com/marstaos/metanote.git
-cd metanote
-
-# 安装依赖
-pip install -r requirements.txt
+  git clone https://github.com/marstaos/metanote.git
+  cd metanote
 ```
-
-### 配置
-
-首先，初始化配置文件：
-
+2.  **安装依赖**
 ```bash
-python cli.py config --init
+  pip install -r requirements.txt
 ```
+如果你使用过旧版本，需要重新安装requirements。
 
-这将创建一个 `config.yaml` 文件，您可以编辑此文件以适应您的需求：
+3.  **下载ASR模型**
+    参照FunASR文档，前往魔搭社区下载模型：[SenseVoiceSmall](https://www.modelscope.cn/models/iic/SenseVoiceSmall)
+    下载完成后，记下模型文件所在的路径，后续配置需要用到。
 
-- 设置 ASR 服务器信息
-- 选择使用 Ollama 或千问大模型进行图像理解 **（前往阿里百炼平台获取qwen的api-key：https://bailian.console.aliyun.com/）**
-- 配置笔记生成模型和提示语
-
-### 基本使用
-
-1. **启动 ASR 服务**：
-
-```bash
-python cli.py asr-server --model /path/to/asr/model
-```
-
-2. **处理单个视频**：
-
-```bash
-python cli.py process /path/to/video.mp4
-```
-
-3. **批量处理视频**：
-
-```bash
-python cli.py batch /path/to/videos/folder --recursive
-```
-
-## 运行要求
-
-- Python 3.10
-- CUDA
-- FFmpeg，在基于 Debian/Ubuntu 的系统上，可以通过以下命令安装：
+4.  **安装 FFmpeg**
+    FFmpeg 用于音视频处理。在基于 Debian/Ubuntu 的系统上，可以通过以下命令安装：
     ```bash
     sudo apt update && sudo apt install ffmpeg
     ```
+    其他系统请参照 FFmpeg 官方文档进行安装。
+
+### 使用方式一：使用图形化界面 (推荐)
+
+推荐使用全新的图形化界面进行操作，更加直观便捷。
+
+1.  **启动图形化界面**
+    在项目根目录下运行：
+    ```bash
+    streamlit run app.py
+    ```
+    应用启动后，终端会显示正在运行服务的url。
+
+2.  **使用步骤**
+    进入图形化界面后，请按照界面左侧导航栏的步骤依次操作：
+
+    *   **步骤 1: 配置检查与修改**
+        *   在此步骤中可以查看和修改 `config.yaml` 文件的内容。
+        *   **关键配置项**：
+            *   `model_path`: ASR 模型的路径 (例如 `model_path: /path/to/your/SenseVoiceSmall`)。请确保填写您在“环境准备”步骤中下载并存放的模型路径。
+            *   `llm.qwen.api_key`: 千问大模型的 API Key。（前往阿里百炼平台获取qwen的api-key：https://bailian.console.aliyun.com/）**注意：这个 key 需要在图形化界面中填写两次，图形化界面里面有两个地方要填sk-key**，分别对应config文件中的 image_understanding.qwen.api-key 和 note_generator.qwen.api-key
+        *   您可以直接在界面提供的编辑器中修改配置，修改完成后务必点击“保存配置”按钮。
+    *   **步骤 2: 启动 ASR 服务**
+        *   点击“启动 ASR 服务”按钮。
+        *   服务启动后，界面右上角会显示服务状态。“running”表示正在尝试启动。
+        *   可以点击“刷新日志”按钮刷新状态，确认服务是否成功运行。
+    *   **步骤 3: 处理视频**
+        *   上传需要处理的视频文件（支持 `.mp4`, `.mov`, `.avi` 等格式）。
+        *   上传完成后，点击“开始处理”按钮。
+        *   处理过程会提取音频、进行语音识别、提取关键帧、进行图像理解，并最终生成笔记。此过程可能需要较长时间，如果没报错就应该是在正常进行。
+    *   **步骤 4: 查看结果**
+        *   处理完成后，生成的 Markdown 笔记内容会直接显示在此页面。
+        *   同时，完整的笔记（Markdown 文件）和提取的关键帧图片会保存在项目根目录下的 `output/[视频文件名]` 文件夹中。
+
+### 方式二：使用命令行界面
+*   **启动 ASR 服务**:
+    ```bash
+    python cli.py asr-server --model /path/to/your/SenseVoiceSmall
+    ```
+    请将 `/path/to/your/SenseVoiceSmall` 替换为实际的 ASR 模型路径。
+
+*   **处理单个视频**:
+    ```bash
+    python cli.py process /path/to/video.mp4
+    ```
+
+*   **批量处理视频**:
+    ```bash
+    python cli.py batch /path/to/videos/folder --recursive
+    ```
+
+## 运行要求
+
+- Python 3.10+
+- CUDA (推荐，用于加速 ASR 和 ollama 运行多模态模型)
+- FFmpeg
+- Streamlit (通过 `requirements.txt` 安装)
 - 本地 Ollama 安装（可选，用于离线图像理解）
 - 阿里云千问 API 密钥（可选，用于云端图像理解和笔记生成），前往阿里百炼平台获取qwen的api-key：https://bailian.console.aliyun.com/
 
@@ -76,15 +101,27 @@ python cli.py batch /path/to/videos/folder --recursive
 
 ```
 metanote/
-├── asr_client.py       # ASR 客户端
-├── asr_server.py       # ASR 服务器
+├── app.py              # Streamlit 图形化界面应用
 ├── cli.py              # 命令行接口
+├── main.py             # 后端主逻辑 (供 app.py 和 cli.py 调用)
 ├── config.yaml         # 配置文件
-├── frame_extractor.py  # 帧提取功能
-├── image_processor.py  # 图像理解
-├── main.py             # 主程序
-├── note_generator.py   # 笔记生成
-└── utils.py            # 工具函数
+├── requirements.txt    # Python 依赖
+|
+├── asr_client.py       # ASR 客户端逻辑
+├── asr_server.py       # ASR 服务端逻辑 (或通过 cli.py 启动)
+├── frame_extractor.py  # 帧提取模块
+├── image_processor.py  # 图像理解模块
+├── note_generator.py   # 笔记生成模块
+├── utils.py            # 工具函数及通用逻辑
+|
+├── docs/               
+│   ├── example/        
+│   ├── index.html      
+│   └── 技术报告.md
+|
+├── logs/               # 运行时日志目录 (例如 ASR 服务日志)
+├── output/             # 默认笔记及图片输出目录
+└── README.md           # 本项目说明文件
 ```
 
 ## 示例
