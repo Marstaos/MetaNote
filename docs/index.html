@@ -1841,98 +1841,111 @@
     </section>
 
     <!-- 快速开始 -->
-    <section id="getting-started" class="py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-        <div class="absolute inset-0 z-0">
-            <div class="absolute inset-0 bg-gray-100 dark:bg-gray-800/50"></div>
-            <!-- 网格背景 -->
-            <div class="absolute inset-0 bg-grid-pattern opacity-[0.05]"></div>
-            <!-- 渐变光晕 -->
-            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-1/2 bg-gradient-radial from-primary-400/20 to-transparent dark:from-primary-600/10 rounded-full filter blur-3xl"></div>
+<section id="getting-started" class="py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div class="absolute inset-0 z-0">
+        <div class="absolute inset-0 bg-gray-100 dark:bg-gray-800/50"></div>
+        <!-- 网格背景 -->
+        <div class="absolute inset-0 bg-grid-pattern opacity-[0.05]"></div>
+        <!-- 渐变光晕 -->
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-1/2 bg-gradient-radial from-primary-400/20 to-transparent dark:from-primary-600/10 rounded-full filter blur-3xl"></div>
+    </div>
+    
+    <div class="max-w-7xl mx-auto relative z-10">
+        <div class="text-center mb-16">
+            <div class="inline-block">
+                <div class="flex items-center justify-center w-16 h-16 mx-auto bg-primary-100 dark:bg-primary-900 rounded-full text-primary-500 dark:text-primary-400 mb-4 revealer">
+                    <i class="fas fa-rocket text-2xl"></i>
+                </div>
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 revealer">快速开始</h2>
+                <div class="w-24 h-1.5 bg-gradient-to-r from-primary-500 to-accent-500 mx-auto rounded-full revealer"></div>
+            </div>
+            <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mt-6 revealer">
+                只需几个简单步骤，即可开始使用MetaNote生成智能笔记
+            </p>
         </div>
         
-        <div class="max-w-7xl mx-auto relative z-10">
-            <div class="text-center mb-16">
-                <div class="inline-block">
-                    <div class="flex items-center justify-center w-16 h-16 mx-auto bg-primary-100 dark:bg-primary-900 rounded-full text-primary-500 dark:text-primary-400 mb-4 revealer">
-                        <i class="fas fa-rocket text-2xl"></i>
-                    </div>
-                    <h2 class="text-3xl md:text-4xl font-bold mb-4 revealer">快速开始</h2>
-                    <div class="w-24 h-1.5 bg-gradient-to-r from-primary-500 to-accent-500 mx-auto rounded-full revealer"></div>
-                </div>
-                <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mt-6 revealer">
-                    只需几个简单步骤，即可开始使用MetaNote生成智能笔记
-                </p>
-            </div>
-            
-            <!-- 安装启动指南 -->
-            <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl overflow-hidden mb-20 border border-gray-200 dark:border-gray-700 revealer">
-                <div class="md:flex">
-                    <div class="md:w-1/2 p-8 md:p-10">
-                        <h3 class="text-2xl font-semibold mb-6 text-gray-800 dark:text-gray-100 flex items-center">
-                            <span class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900 text-primary-500 dark:text-primary-400 flex items-center justify-center mr-2">
-                                <i class="fas fa-download"></i>
-                            </span>
-                            安装
-                        </h3>
-                        <div class="bg-gray-900 dark:bg-gray-950 rounded-2xl p-5 mb-8 overflow-x-auto">
-                            <pre class="text-gray-300 text-sm md:text-base"><code class="language-bash"># 克隆项目
-git clone https://github.com/username/metanote.git
+        <!-- 安装启动指南 -->
+        <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl overflow-hidden mb-20 border border-gray-200 dark:border-gray-700 revealer">
+            <div class="md:flex">
+                <div class="md:w-1/2 p-8 md:p-10">
+                    <h3 class="text-2xl font-semibold mb-6 text-gray-800 dark:text-gray-100 flex items-center">
+                        <span class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900 text-primary-500 dark:text-primary-400 flex items-center justify-center mr-2">
+                            <i class="fas fa-download"></i>
+                        </span>
+                        安装
+                    </h3>
+                    <div class="bg-gray-900 dark:bg-gray-950 rounded-2xl p-5 mb-8 overflow-x-auto">
+                        <pre class="text-gray-300 text-sm md:text-base"><code class="language-bash"># 克隆项目
+git clone https://github.com/Marstaos/metanote.git
 cd metanote
 
 # 安装依赖
 pip install -r requirements.txt</code></pre>
-                            <div class="flex justify-end mt-4">
-                                <button class="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-md bg-gray-800 text-gray-300 hover:bg-gray-700">
-                                    <i class="far fa-copy mr-1.5"></i> 复制代码
-                                </button>
-                            </div>
+                        <div class="flex justify-end mt-4">
+                            <button class="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-md bg-gray-800 text-gray-300 hover:bg-gray-700">
+                                <i class="far fa-copy mr-1.5"></i> 复制代码
+                            </button>
                         </div>
-                        
-                        <h3 class="text-2xl font-semibold mb-6 text-gray-800 dark:text-gray-100 flex items-center">
-                            <span class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900 text-primary-500 dark:text-primary-400 flex items-center justify-center mr-2">
-                                <i class="fas fa-cog"></i>
-                            </span>
-                            配置
-                        </h3>
-                        <div class="bg-gray-900 dark:bg-gray-950 rounded-2xl p-5 mb-8 overflow-x-auto">
-                            <pre class="text-gray-300 text-sm md:text-base"><code class="language-bash"># 初始化配置文件
+                    </div>
+                    
+                    <h3 class="text-2xl font-semibold mb-6 text-gray-800 dark:text-gray-100 flex items-center">
+                        <span class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900 text-primary-500 dark:text-primary-400 flex items-center justify-center mr-2">
+                            <i class="fas fa-cog"></i>
+                        </span>
+                        配置
+                    </h3>
+                    <div class="bg-gray-900 dark:bg-gray-950 rounded-2xl p-5 mb-8 overflow-x-auto">
+                        <pre class="text-gray-300 text-sm md:text-base"><code class="language-bash"># 初始化配置文件
 python cli.py config --init</code></pre>
-                            <div class="flex justify-end mt-4">
-                                <button class="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-md bg-gray-800 text-gray-300 hover:bg-gray-700">
-                                    <i class="far fa-copy mr-1.5"></i> 复制代码
-                                </button>
-                            </div>
+                        <div class="flex justify-end mt-4">
+                            <button class="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-md bg-gray-800 text-gray-300 hover:bg-gray-700">
+                                <i class="far fa-copy mr-1.5"></i> 复制代码
+                            </button>
                         </div>
-                        
-                        <div class="bg-primary-50 dark:bg-primary-900/30 border border-primary-200 dark:border-primary-800 rounded-xl p-6 mb-8">
-                            <h4 class="font-semibold text-primary-700 dark:text-primary-400 mb-3">配置选项</h4>
-                            <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-300">
-                                <li class="flex items-start">
-                                    <span class="text-primary-500 dark:text-primary-400 mr-2">•</span>
-                                    <span>设置ASR服务器信息</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <span class="text-primary-500 dark:text-primary-400 mr-2">•</span>
-                                    <span>选择使用Ollama或千问进行图像理解</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <span class="text-primary-500 dark:text-primary-400 mr-2">•</span>
-                                    <span>配置笔记生成模型和提示语</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <span class="text-primary-500 dark:text-primary-400 mr-2">•</span>
-                                    <span>调整关键帧提取参数</span>
-                                </li>
-                            </ul>
-                        </div>
-                        
-                        <h3 class="text-2xl font-semibold mb-6 text-gray-800 dark:text-gray-100 flex items-center">
-                            <span class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900 text-primary-500 dark:text-primary-400 flex items-center justify-center mr-2">
-                                <i class="fas fa-play"></i>
-                            </span>
-                            基本使用
-                        </h3>
-                        <div class="bg-gray-900 dark:bg-gray-950 rounded-2xl p-5 overflow-x-auto">
+                    </div>
+                    
+                    <div class="bg-primary-50 dark:bg-primary-900/30 border border-primary-200 dark:border-primary-800 rounded-xl p-6 mb-8">
+                        <h4 class="font-semibold text-primary-700 dark:text-primary-400 mb-3">配置选项</h4>
+                        <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-300">
+                            <li class="flex items-start">
+                                <span class="text-primary-500 dark:text-primary-400 mr-2">•</span>
+                                <span>设置ASR服务器信息</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-primary-500 dark:text-primary-400 mr-2">•</span>
+                                <span>选择使用Ollama或千问进行图像理解</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-primary-500 dark:text-primary-400 mr-2">•</span>
+                                <span>配置笔记生成模型和提示语</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-primary-500 dark:text-primary-400 mr-2">•</span>
+                                <span>调整关键帧提取参数</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <h3 class="text-2xl font-semibold mb-6 text-gray-800 dark:text-gray-100 flex items-center">
+                        <span class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900 text-primary-500 dark:text-primary-400 flex items-center justify-center mr-2">
+                            <i class="fas fa-play"></i>
+                        </span>
+                        使用方式
+                    </h3>
+                    
+                    <!-- 选项卡导航 -->
+                    <div class="mb-6 flex border-b border-gray-200 dark:border-gray-700">
+                        <button id="tab-cli" class="px-4 py-2 text-sm font-medium border-b-2 border-primary-500 dark:border-primary-400 text-primary-600 dark:text-primary-400 focus:outline-none">
+                            命令行使用
+                        </button>
+                        <button id="tab-gui" class="px-4 py-2 text-sm font-medium border-b-2 border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none">
+                            图形界面使用 (推荐)
+                        </button>
+                    </div>
+                    
+                    <!-- 命令行使用内容 -->
+                    <div id="content-cli" class="tab-content">
+                        <div class="bg-gray-900 dark:bg-gray-950 rounded-2xl p-5 mb-4 overflow-x-auto">
                             <pre class="text-gray-300 text-sm md:text-base"><code class="language-bash"># 启动ASR服务
 python cli.py asr-server --model /path/to/asr/model
 
@@ -1948,169 +1961,192 @@ python cli.py batch /path/to/videos/folder --recursive</code></pre>
                             </div>
                         </div>
                     </div>
-
-                    <h3 class="text-2xl font-semibold mb-6 text-gray-800 dark:text-gray-100 flex items-center">
-                        <span class="w-8 h-8 rounded-full bg-accent-100 dark:bg-accent-900 text-accent-500 dark:text-accent-400 flex items-center justify-center mr-2">
-                            <i class="fas fa-desktop"></i>
-                        </span>
-                        图形界面（推荐）
-                    </h3>
-                    <div class="bg-gray-900 dark:bg-gray-950 rounded-2xl p-5 mb-8 overflow-x-auto">
-                        <pre class="text-gray-300 text-sm md:text-base"><code class="language-bash"># 启动图形界面
+                    
+                    <!-- 图形界面使用内容 -->
+                    <div id="content-gui" class="tab-content hidden">
+                        <div class="bg-gray-900 dark:bg-gray-950 rounded-2xl p-5 mb-4 overflow-x-auto">
+                            <pre class="text-gray-300 text-sm md:text-base"><code class="language-bash"># 启动图形界面
 streamlit run app.py</code></pre>
-                        <div class="flex justify-end mt-4">
-                            <button class="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-md bg-gray-800 text-gray-300 hover:bg-gray-700">
-                                <i class="far fa-copy mr-1.5"></i> 复制代码
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="bg-accent-50 dark:bg-accent-900/30 border border-accent-200 dark:border-accent-800 rounded-xl p-6 mb-8">
-                        <h4 class="font-semibold text-accent-700 dark:text-accent-400 mb-3">图形界面使用流程</h4>
-                        <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-300">
-                            <li class="flex items-start">
-                                <span class="text-accent-500 dark:text-accent-400 mr-2">•</span>
-                                <span><strong>步骤 1</strong>: 配置检查与修改 - 确保ASR模型路径和API Key设置正确</span>
-                            </li>
-                            <li class="flex items-start">
-                                <span class="text-accent-500 dark:text-accent-400 mr-2">•</span>
-                                <span><strong>步骤 2</strong>: 启动ASR服务 - 点击按钮启动服务</span>
-                            </li>
-                            <li class="flex items-start">
-                                <span class="text-accent-500 dark:text-accent-400 mr-2">•</span>
-                                <span><strong>步骤 3</strong>: 处理视频 - 上传视频文件并开始处理</span>
-                            </li>
-                            <li class="flex items-start">
-                                <span class="text-accent-500 dark:text-accent-400 mr-2">•</span>
-                                <span><strong>步骤 4</strong>: 查看结果 - 在界面中查看生成的笔记</span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="md:w-1/2 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-750 dark:to-gray-800 p-8 md:p-10 border-t md:border-t-0 md:border-l border-gray-200 dark:border-gray-700">
-                        <h3 class="text-2xl font-semibold mb-6 text-gray-800 dark:text-gray-100">运行要求</h3>
-                        <div class="space-y-6">
-                            <div class="flex items-start">
-                                <div class="flex-shrink-0 mt-1 mr-4">
-                                    <div class="w-12 h-12 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center text-primary-500 dark:text-primary-400 shadow-md">
-                                        <i class="fab fa-python text-xl"></i>
-                                    </div>
-                                </div>
-                                <div>
-                                    <h4 class="font-semibold text-lg mb-1">Python 3.10或更高版本</h4>
-                                    <p class="text-gray-600 dark:text-gray-300 text-sm">推荐使用Python 3.10以获得最佳兼容性。可通过官方网站或Anaconda安装。</p>
-                                </div>
-                            </div>
-                            
-                            <div class="flex items-start">
-                                <div class="flex-shrink-0 mt-1 mr-4">
-                                    <div class="w-12 h-12 rounded-full bg-accent-100 dark:bg-accent-900 flex items-center justify-center text-accent-500 dark:text-accent-400 shadow-md">
-                                        <i class="fas fa-microchip text-xl"></i>
-                                    </div>
-                                </div>
-                                <div>
-                                    <h4 class="font-semibold text-lg mb-1">下载ASR模型</h4>
-                                    <p class="text-gray-600 dark:text-gray-300 text-sm">模型参考FunASR官方：https://www.modelscope.cn/models/iic/SenseVoiceSmall</p>
-                                    <div class="mt-2">
-                                        <a href="https://www.modelscope.cn/models/iic/SenseVoiceSmall" class="text-success-600 dark:text-success-400 text-sm hover:underline flex items-center">
-                                            <span>前往下载ASR模型SenseVoiceSmall</span>
-                                            <i class="fas fa-external-link-alt ml-1 text-xs"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="flex items-start">
-                                <div class="flex-shrink-0 mt-1 mr-4">
-                                    <div class="w-12 h-12 rounded-full bg-success-100 dark:bg-success-900 flex items-center justify-center text-success-500 dark:text-success-400 shadow-md">
-                                        <i class="fas fa-film text-xl"></i>
-                                    </div>
-                                </div>
-                                <div>
-                                    <h4 class="font-semibold text-lg mb-1">FFmpeg</h4>
-                                    <p class="text-gray-600 dark:text-gray-300 text-sm">用于视频处理，需要预先安装。支持视频解码和提取关键帧。</p>
-                                    <div class="mt-2">
-                                        <a href="#" class="text-success-600 dark:text-success-400 text-sm hover:underline flex items-center">
-                                            <span>FFmpeg下载参见README.md</span>
-                                            <i class="fas fa-external-link-alt ml-1 text-xs"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="flex items-start">
-                                <div class="flex-shrink-0 mt-1 mr-4">
-                                    <div class="w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center text-purple-500 dark:text-purple-400 shadow-md">
-                                        <i class="fas fa-desktop text-xl"></i>
-                                    </div>
-                                </div>
-                                <div>
-                                    <h4 class="font-semibold text-lg mb-1">本地Ollama安装（可选）</h4>
-                                    <p class="text-gray-600 dark:text-gray-300 text-sm">用于离线图像理解，支持LLaVA多模态模型。</p>
-                                    <div class="mt-2">
-                                        <a href="https://ollama.com/download" class="text-purple-600 dark:text-purple-400 text-sm hover:underline flex items-center">
-                                            <span>Ollama安装指南</span>
-                                            <i class="fas fa-external-link-alt ml-1 text-xs"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="flex items-start">
-                                <div class="flex-shrink-0 mt-1 mr-4">
-                                    <div class="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center text-blue-500 dark:text-blue-400 shadow-md">
-                                        <i class="fas fa-cloud text-xl"></i>
-                                    </div>
-                                </div>
-                                <div>
-                                    <h4 class="font-semibold text-lg mb-1">阿里云千问API密钥（可选）</h4>
-                                    <p class="text-gray-600 dark:text-gray-300 text-sm">用于云端图像理解和笔记生成，提供更高质量的结果。</p>
-                                    <div class="mt-2">
-                                        <a href="https://bailian.console.aliyun.com/" class="text-blue-600 dark:text-blue-400 text-sm hover:underline flex items-center">
-                                            <span>获取千问API</span>
-                                            <i class="fas fa-external-link-alt ml-1 text-xs"></i>
-                                        </a>
-                                    </div>
-                                </div>
+                            <div class="flex justify-end mt-4">
+                                <button class="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-md bg-gray-800 text-gray-300 hover:bg-gray-700">
+                                    <i class="far fa-copy mr-1.5"></i> 复制代码
+                                </button>
                             </div>
                         </div>
-                        <div class="mt-12 bg-gradient-to-r from-accent-50 to-primary-50 dark:from-accent-900/30 dark:to-primary-900/30 border border-accent-200/50 dark:border-accent-800/50 rounded-xl p-6">
-                            <div class="flex">
-                                <div class="flex-shrink-0 mr-4">
-                                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-accent-400 to-primary-400 flex items-center justify-center text-white shadow-md">
-                                        <i class="fas fa-desktop text-xl"></i>
-                                    </div>
+                        
+                        <div class="bg-accent-50 dark:bg-accent-900/30 border border-accent-200 dark:border-accent-800 rounded-xl p-6 mb-4">
+                            <h4 class="font-semibold text-accent-700 dark:text-accent-400 mb-3">图形界面使用流程</h4>
+                            <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-300">
+                                <li class="flex items-start">
+                                    <span class="text-accent-500 dark:text-accent-400 mr-2">•</span>
+                                    <span><strong>步骤 1</strong>: 配置检查与修改 - 确保ASR模型路径和API Key设置正确</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-accent-500 dark:text-accent-400 mr-2">•</span>
+                                    <span><strong>步骤 2</strong>: 启动ASR服务 - 点击按钮启动服务</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-accent-500 dark:text-accent-400 mr-2">•</span>
+                                    <span><strong>步骤 3</strong>: 处理视频 - 上传视频文件并开始处理</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-accent-500 dark:text-accent-400 mr-2">•</span>
+                                    <span><strong>步骤 4</strong>: 查看结果 - 在界面中查看生成的笔记</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-gradient-to-r from-accent-100/50 to-primary-100/50 dark:from-accent-900/30 dark:to-primary-900/30 rounded-xl p-4">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 mr-3">
+                                    <i class="fas fa-lightbulb text-accent-500 dark:text-accent-400 text-xl"></i>
                                 </div>
-                                <div>
-                                    <h4 class="font-semibold text-xl mb-3 text-gray-800 dark:text-gray-100">推荐使用图形界面</h4>
-                                    <p class="text-gray-600 dark:text-gray-300">全新的图形界面提供更直观的操作体验，无需命令行经验也能轻松使用。从配置修改到结果查看，一站式完成所有操作。</p>
-                                    <a href="#gui-interface" class="inline-flex items-center mt-4 text-accent-600 dark:text-accent-400 font-medium hover:underline">
-                                        了解更多图形界面特性
-                                        <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">
+                                    图形界面提供更直观的操作体验，无需命令行经验也能轻松使用。启动后，浏览器会自动打开界面。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="md:w-1/2 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-750 dark:to-gray-800 p-8 md:p-10 border-t md:border-t-0 md:border-l border-gray-200 dark:border-gray-700">
+                    <h3 class="text-2xl font-semibold mb-6 text-gray-800 dark:text-gray-100">运行要求</h3>
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 mt-1 mr-4">
+                                <div class="w-12 h-12 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center text-primary-500 dark:text-primary-400 shadow-md">
+                                    <i class="fab fa-python text-xl"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg mb-1">Python 3.10或更高版本</h4>
+                                <p class="text-gray-600 dark:text-gray-300 text-sm">推荐使用Python 3.10以获得最佳兼容性。可通过官方网站或Anaconda安装。</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 mt-1 mr-4">
+                                <div class="w-12 h-12 rounded-full bg-accent-100 dark:bg-accent-900 flex items-center justify-center text-accent-500 dark:text-accent-400 shadow-md">
+                                    <i class="fas fa-desktop text-xl"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg mb-1">Streamlit (图形界面)</h4>
+                                <p class="text-gray-600 dark:text-gray-300 text-sm">通过requirements.txt已自动安装。提供直观的图形化操作界面，无需命令行经验。</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 mt-1 mr-4">
+                                <div class="w-12 h-12 rounded-full bg-accent-100 dark:bg-accent-900 flex items-center justify-center text-accent-500 dark:text-accent-400 shadow-md">
+                                    <i class="fas fa-microchip text-xl"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg mb-1">下载ASR模型</h4>
+                                <p class="text-gray-600 dark:text-gray-300 text-sm">模型参考FunASR官方：https://www.modelscope.cn/models/iic/SenseVoiceSmall</p>
+                                <div class="mt-2">
+                                    <a href="https://www.modelscope.cn/models/iic/SenseVoiceSmall" class="text-success-600 dark:text-success-400 text-sm hover:underline flex items-center">
+                                        <span>前往下载ASR模型SenseVoiceSmall</span>
+                                        <i class="fas fa-external-link-alt ml-1 text-xs"></i>
                                     </a>
                                 </div>
                             </div>
                         </div>
-                        <div class="mt-12 bg-gradient-to-r from-primary-50 to-accent-50 dark:from-primary-900/30 dark:to-accent-900/30 border border-primary-200/50 dark:border-primary-800/50 rounded-xl p-6">
-                            <div class="flex">
-                                <div class="flex-shrink-0 mr-4">
-                                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-primary-400 to-accent-400 flex items-center justify-center text-white shadow-md">
-                                        <i class="fas fa-lightbulb text-xl"></i>
-                                    </div>
+                        
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 mt-1 mr-4">
+                                <div class="w-12 h-12 rounded-full bg-success-100 dark:bg-success-900 flex items-center justify-center text-success-500 dark:text-success-400 shadow-md">
+                                    <i class="fas fa-film text-xl"></i>
                                 </div>
-                                <div>
-                                    <h4 class="font-semibold text-xl mb-3 text-gray-800 dark:text-gray-100">小贴士</h4>
-                                    <p class="text-gray-600 dark:text-gray-300">首次使用时，建议先处理一个短视频测试功能。处理时间取决于视频长度和硬件配置。使用GPU可显著提高处理速度。</p>
-                                    <a href="https://github.com/Marstaos/MetaNote" class="inline-flex items-center mt-4 text-primary-600 dark:text-primary-400 font-medium hover:underline">
-                                        查看技术报告
-                                        <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg mb-1">FFmpeg</h4>
+                                <p class="text-gray-600 dark:text-gray-300 text-sm">用于视频处理，需要预先安装。支持视频解码和提取关键帧。</p>
+                                <div class="mt-2">
+                                    <a href="#" class="text-success-600 dark:text-success-400 text-sm hover:underline flex items-center">
+                                        <span>FFmpeg下载参见README.md</span>
+                                        <i class="fas fa-external-link-alt ml-1 text-xs"></i>
                                     </a>
                                 </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 mt-1 mr-4">
+                                <div class="w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center text-purple-500 dark:text-purple-400 shadow-md">
+                                    <i class="fas fa-desktop text-xl"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg mb-1">本地Ollama安装（可选）</h4>
+                                <p class="text-gray-600 dark:text-gray-300 text-sm">用于离线图像理解，支持LLaVA多模态模型。</p>
+                                <div class="mt-2">
+                                    <a href="https://ollama.com/download" class="text-purple-600 dark:text-purple-400 text-sm hover:underline flex items-center">
+                                        <span>Ollama安装指南</span>
+                                        <i class="fas fa-external-link-alt ml-1 text-xs"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 mt-1 mr-4">
+                                <div class="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center text-blue-500 dark:text-blue-400 shadow-md">
+                                    <i class="fas fa-cloud text-xl"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg mb-1">阿里云千问API密钥（可选）</h4>
+                                <p class="text-gray-600 dark:text-gray-300 text-sm">用于云端图像理解和笔记生成，提供更高质量的结果。</p>
+                                <div class="mt-2">
+                                    <a href="https://bailian.console.aliyun.com/" class="text-blue-600 dark:text-blue-400 text-sm hover:underline flex items-center">
+                                        <span>获取千问API</span>
+                                        <i class="fas fa-external-link-alt ml-1 text-xs"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-12 bg-gradient-to-r from-accent-50 to-primary-50 dark:from-accent-900/30 dark:to-primary-900/30 border border-accent-200/50 dark:border-accent-800/50 rounded-xl p-6">
+                        <div class="flex">
+                            <div class="flex-shrink-0 mr-4">
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-accent-400 to-primary-400 flex items-center justify-center text-white shadow-md">
+                                    <i class="fas fa-desktop text-xl"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-xl mb-3 text-gray-800 dark:text-gray-100">推荐使用图形界面</h4>
+                                <p class="text-gray-600 dark:text-gray-300">全新的图形界面提供更直观的操作体验，无需命令行经验也能轻松使用。从配置修改到结果查看，一站式完成所有操作。</p>
+                                <a href="#gui-interface" class="inline-flex items-center mt-4 text-accent-600 dark:text-accent-400 font-medium hover:underline">
+                                    了解更多图形界面特性
+                                    <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-12 bg-gradient-to-r from-primary-50 to-accent-50 dark:from-primary-900/30 dark:to-accent-900/30 border border-primary-200/50 dark:border-primary-800/50 rounded-xl p-6">
+                        <div class="flex">
+                            <div class="flex-shrink-0 mr-4">
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-primary-400 to-accent-400 flex items-center justify-center text-white shadow-md">
+                                    <i class="fas fa-lightbulb text-xl"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-xl mb-3 text-gray-800 dark:text-gray-100">小贴士</h4>
+                                <p class="text-gray-600 dark:text-gray-300">首次使用时，建议先处理一个短视频测试功能。处理时间取决于视频长度和硬件配置。使用GPU可显著提高处理速度。</p>
+                                <a href="https://github.com/Marstaos/MetaNote" class="inline-flex items-center mt-4 text-primary-600 dark:text-primary-400 font-medium hover:underline">
+                                    查看技术报告
+                                    <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
             
             <!-- QuickStart 指南 -->
             <div class="revealer">
@@ -3235,6 +3271,36 @@ def preorder(root):
                 const BB = ((B.toString(16).length == 1) ? "0" + B.toString(16) : B.toString(16));
                 
                 return "#" + RR + GG + BB;
+            }
+        
+            // 选项卡切换功能
+            const tabCli = document.getElementById('tab-cli');
+            const tabGui = document.getElementById('tab-gui');
+            const contentCli = document.getElementById('content-cli');
+            const contentGui = document.getElementById('content-gui');
+            
+            if(tabCli && tabGui && contentCli && contentGui) {
+                tabCli.addEventListener('click', function() {
+                    tabCli.classList.add('border-primary-500', 'dark:border-primary-400', 'text-primary-600', 'dark:text-primary-400');
+                    tabCli.classList.remove('border-transparent', 'text-gray-500', 'dark:text-gray-400');
+                    
+                    tabGui.classList.remove('border-primary-500', 'dark:border-primary-400', 'text-primary-600', 'dark:text-primary-400');
+                    tabGui.classList.add('border-transparent', 'text-gray-500', 'dark:text-gray-400');
+                    
+                    contentCli.classList.remove('hidden');
+                    contentGui.classList.add('hidden');
+                });
+                
+                tabGui.addEventListener('click', function() {
+                    tabGui.classList.add('border-primary-500', 'dark:border-primary-400', 'text-primary-600', 'dark:text-primary-400');
+                    tabGui.classList.remove('border-transparent', 'text-gray-500', 'dark:text-gray-400');
+                    
+                    tabCli.classList.remove('border-primary-500', 'dark:border-primary-400', 'text-primary-600', 'dark:text-primary-400');
+                    tabCli.classList.add('border-transparent', 'text-gray-500', 'dark:text-gray-400');
+                    
+                    contentGui.classList.remove('hidden');
+                    contentCli.classList.add('hidden');
+                });
             }
         });
     </script>
