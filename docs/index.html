@@ -899,6 +899,270 @@
         </div>
     </section>
 
+    <!-- 图形界面介绍 -->
+    <section id="gui-interface" class="py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <div class="absolute inset-0 bg-gray-100 dark:bg-gray-800/50"></div>
+            <!-- 网格背景 -->
+            <div class="absolute inset-0 bg-grid-pattern opacity-[0.05]"></div>
+            <!-- 渐变光晕 -->
+            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-1/2 bg-gradient-radial from-accent-400/20 to-transparent dark:from-accent-600/10 rounded-full filter blur-3xl"></div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto relative z-10">
+            <div class="text-center mb-16">
+                <div class="inline-block">
+                    <div class="flex items-center justify-center w-16 h-16 mx-auto bg-accent-100 dark:bg-accent-900 rounded-full text-accent-500 dark:text-accent-400 mb-4 revealer">
+                        <i class="fas fa-laptop text-2xl"></i>
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4 revealer">全新图形界面</h2>
+                    <div class="w-24 h-1.5 bg-gradient-to-r from-accent-500 to-primary-500 mx-auto rounded-full revealer"></div>
+                </div>
+                <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mt-6 revealer">
+                    告别命令行！MetaNote现已推出直观易用的图形界面，让笔记生成更加简单
+                </p>
+            </div>
+            
+            <!-- 图形界面展示 -->
+            <div class="flex flex-col lg:flex-row items-center gap-12 mb-16">
+                <div class="lg:w-1/2 relative revealer">
+                    <!-- 图形界面模拟 -->
+                    <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-700 transform transition-all hover:scale-[1.02] duration-700 ease-out">
+                        <div class="p-4 bg-gradient-to-r from-accent-500 to-primary-500 flex items-center space-x-2">
+                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                            <div class="ml-auto text-xs text-white">MetaNote 图形界面</div>
+                        </div>
+                        <!-- 界面模拟内容 -->
+                        <div class="p-6 flex">
+                            <!-- 侧边导航 -->
+                            <div class="w-1/4 pr-4 border-r border-gray-200 dark:border-gray-700">
+                                <div class="space-y-3">
+                                    <div class="bg-accent-100 dark:bg-accent-900/50 px-3 py-2 rounded-lg text-accent-700 dark:text-accent-300 font-medium flex items-center">
+                                        <div class="w-6 h-6 rounded-full bg-accent-500 text-white flex items-center justify-center mr-2">1</div>
+                                        <span>配置检查</span>
+                                    </div>
+                                    <div class="px-3 py-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center">
+                                        <div class="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 flex items-center justify-center mr-2">2</div>
+                                        <span>启动ASR服务</span>
+                                    </div>
+                                    <div class="px-3 py-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center">
+                                        <div class="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 flex items-center justify-center mr-2">3</div>
+                                        <span>处理视频</span>
+                                    </div>
+                                    <div class="px-3 py-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center">
+                                        <div class="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 flex items-center justify-center mr-2">4</div>
+                                        <span>查看结果</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 主内容区 -->
+                            <div class="w-3/4 pl-4">
+                                <h3 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-100">配置检查与修改</h3>
+                                <div class="bg-gray-50 dark:bg-gray-900 rounded-lg p-4 mb-4 text-sm font-mono">
+                                    <div class="text-blue-600 dark:text-blue-400">model_path: <span class="text-green-600 dark:text-green-400">/path/to/SenseVoiceSmall</span></div>
+                                    <div class="text-blue-600 dark:text-blue-400">llm:</div>
+                                    <div class="pl-4 text-blue-600 dark:text-blue-400">qwen:</div>
+                                    <div class="pl-8 text-blue-600 dark:text-blue-400">api_key: <span class="text-green-600 dark:text-green-400">sk-*************</span></div>
+                                </div>
+                                <button class="bg-accent-500 hover:bg-accent-600 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center transition-colors">
+                                    <i class="fas fa-save mr-2"></i> 保存配置
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lg:w-1/2 revealer">
+                    <h3 class="text-2xl font-semibold mb-6 text-gray-800 dark:text-gray-100">直观简洁的操作流程</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6">
+                        全新的基于Streamlit的图形界面让MetaNote变得更加直观易用，即使没有命令行操作经验也能轻松上手。
+                    </p>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 mt-1">
+                                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-accent-400 to-accent-600 dark:from-accent-500 dark:to-accent-700 flex items-center justify-center text-white shadow-md">
+                                    <i class="fas fa-check text-lg"></i>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="text-lg font-semibold text-gray-800 dark:text-gray-100">四步流程，简单易用</h4>
+                                <p class="text-gray-600 dark:text-gray-300 mt-1">通过清晰的步骤导航，从配置检查到查看结果，整个过程一目了然。</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 mt-1">
+                                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary-400 to-primary-600 dark:from-primary-500 dark:to-primary-700 flex items-center justify-center text-white shadow-md">
+                                    <i class="fas fa-upload text-lg"></i>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="text-lg font-semibold text-gray-800 dark:text-gray-100">拖放上传视频</h4>
+                                <p class="text-gray-600 dark:text-gray-300 mt-1">只需简单拖放即可上传视频文件，支持多种常见视频格式。</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 mt-1">
+                                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-success-400 to-success-600 dark:from-success-500 dark:to-success-700 flex items-center justify-center text-white shadow-md">
+                                    <i class="fas fa-cog text-lg"></i>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="text-lg font-semibold text-gray-800 dark:text-gray-100">可视化配置</h4>
+                                <p class="text-gray-600 dark:text-gray-300 mt-1">在界面中直接修改配置文件，无需手动编辑文本文件。</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 mt-1">
+                                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 dark:from-blue-500 dark:to-blue-700 flex items-center justify-center text-white shadow-md">
+                                    <i class="fas fa-eye text-lg"></i>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="text-lg font-semibold text-gray-800 dark:text-gray-100">实时查看处理结果</h4>
+                                <p class="text-gray-600 dark:text-gray-300 mt-1">处理完成后直接在界面中查看生成的Markdown笔记，无需跳转。</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8">
+                        <a href="#getting-started" class="btn-hover inline-flex items-center justify-center px-6 py-3 text-base font-medium rounded-xl shadow-lg border border-accent-200 dark:border-accent-800 text-accent-700 bg-accent-50 hover:bg-accent-100 dark:text-accent-100 dark:bg-accent-900/50 dark:hover:bg-accent-800/70 transition-all">
+                            了解如何开始使用 <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 使用步骤 -->
+            <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-700 revealer">
+                <div class="p-8 md:p-10">
+                    <h3 class="text-2xl font-semibold mb-10 text-center text-gray-800 dark:text-gray-100">图形界面使用步骤</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="bg-gradient-to-br from-accent-50 to-accent-100 dark:from-accent-900/40 dark:to-accent-800/40 rounded-xl border border-accent-200 dark:border-accent-700 p-6 relative">
+                            <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                <div class="w-10 h-10 rounded-full bg-accent-500 text-white flex items-center justify-center shadow-lg">
+                                    <span class="font-bold">1</span>
+                                </div>
+                            </div>
+                            <h4 class="text-center font-semibold mb-4 pt-3 text-gray-800 dark:text-gray-100">配置检查与修改</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-300">
+                                查看并修改配置文件，确保ASR模型路径和API Key设置正确。修改后点击"保存配置"。
+                            </p>
+                        </div>
+                        
+                        <div class="bg-gradient-to-br from-primary-50 to-primary-100 dark:from-primary-900/40 dark:to-primary-800/40 rounded-xl border border-primary-200 dark:border-primary-700 p-6 relative">
+                            <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                <div class="w-10 h-10 rounded-full bg-primary-500 text-white flex items-center justify-center shadow-lg">
+                                    <span class="font-bold">2</span>
+                                </div>
+                            </div>
+                            <h4 class="text-center font-semibold mb-4 pt-3 text-gray-800 dark:text-gray-100">启动ASR服务</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-300">
+                                点击"启动ASR服务"按钮，等待服务成功运行。可通过"刷新日志"按钮查看服务状态。
+                            </p>
+                        </div>
+                        
+                        <div class="bg-gradient-to-br from-success-50 to-success-100 dark:from-success-900/40 dark:to-success-800/40 rounded-xl border border-success-200 dark:border-success-700 p-6 relative">
+                            <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                <div class="w-10 h-10 rounded-full bg-success-500 text-white flex items-center justify-center shadow-lg">
+                                    <span class="font-bold">3</span>
+                                </div>
+                            </div>
+                            <h4 class="text-center font-semibold mb-4 pt-3 text-gray-800 dark:text-gray-100">处理视频</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-300">
+                                上传需要处理的视频文件，然后点击"开始处理"按钮。系统会自动完成语音识别、提取关键帧等处理步骤。
+                            </p>
+                        </div>
+                        
+                        <div class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/40 dark:to-blue-800/40 rounded-xl border border-blue-200 dark:border-blue-700 p-6 relative">
+                            <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                <div class="w-10 h-10 rounded-full bg-blue-500 text-white flex items-center justify-center shadow-lg">
+                                    <span class="font-bold">4</span>
+                                </div>
+                            </div>
+                            <h4 class="text-center font-semibold mb-4 pt-3 text-gray-800 dark:text-gray-100">查看结果</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-300">
+                                处理完成后，生成的Markdown笔记会直接显示在界面中。同时笔记文件和图片会保存在output文件夹。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 命令行VS图形界面 -->
+            <div class="mt-16 revealer">
+                <h3 class="text-2xl font-semibold mb-10 text-center text-gray-800 dark:text-gray-100">命令行 vs 图形界面</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700">
+                        <div class="h-16 bg-gray-100 dark:bg-gray-750 flex items-center px-6">
+                            <div class="w-3 h-3 rounded-full bg-red-500 mr-2"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500 mr-2"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
+                            <span class="ml-auto text-gray-500 dark:text-gray-400 text-sm">命令行界面</span>
+                        </div>
+                        <div class="p-6">
+                            <div class="mb-6">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
+                                    <i class="fas fa-terminal mr-1"></i> 需要命令行经验
+                                </span>
+                            </div>
+                            <div class="bg-gray-900 dark:bg-gray-950 rounded-xl p-4 overflow-x-auto mb-4">
+                                <pre class="text-gray-300 text-sm"><code class="language-bash">python cli.py asr-server --model /path/to/model</code></pre>
+                            </div>
+                            <div class="bg-gray-900 dark:bg-gray-950 rounded-xl p-4 overflow-x-auto mb-4">
+                                <pre class="text-gray-300 text-sm"><code class="language-bash">python cli.py process /path/to/video.mp4</code></pre>
+                            </div>
+                            <div class="space-y-4 text-gray-600 dark:text-gray-300 mt-6">
+                                <p>- 需多步命令分别执行</p>
+                                <p>- 需要编辑文本配置文件</p>
+                                <p>- 适合有命令行经验的用户</p>
+                                <p>- 支持批处理多个视频</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-lg overflow-hidden border border-accent-200 dark:border-accent-700 transform hover:scale-[1.02] transition-all">
+                        <div class="h-16 bg-gradient-to-r from-accent-500 to-primary-500 flex items-center px-6">
+                            <div class="w-3 h-3 rounded-full bg-white opacity-70 mr-2"></div>
+                            <div class="w-3 h-3 rounded-full bg-white opacity-70 mr-2"></div>
+                            <div class="w-3 h-3 rounded-full bg-white opacity-70 mr-2"></div>
+                            <span class="ml-auto text-white text-sm">图形界面</span>
+                        </div>
+                        <div class="p-6">
+                            <div class="mb-6">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-success-100 text-success-800 dark:bg-success-900 dark:text-success-200">
+                                    <i class="fas fa-mouse-pointer mr-1"></i> 点击即可操作
+                                </span>
+                            </div>
+                            <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-4 overflow-hidden mb-4 border border-gray-200 dark:border-gray-700">
+                                <div class="flex items-center justify-center h-20">
+                                    <div class="text-center">
+                                        <i class="fas fa-terminal text-xl text-accent-500 mb-2"></i>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300">只需一行命令启动界面</p>
+                                        <p class="text-xs text-accent-600 dark:text-accent-400 font-mono mt-1">streamlit run app.py</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-y-4 text-gray-600 dark:text-gray-300 mt-6">
+                                <p>- 清晰的步骤导航</p>
+                                <p>- 可视化配置编辑</p>
+                                <p>- 适合所有用户，无需命令行经验</p>
+                                <p>- 直接在界面中查看处理结果</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- 工作原理 -->
     <section id="how-it-works" class="py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
         <div class="absolute inset-0 z-0">
@@ -1684,7 +1948,45 @@ python cli.py batch /path/to/videos/folder --recursive</code></pre>
                             </div>
                         </div>
                     </div>
-                    
+
+                    <h3 class="text-2xl font-semibold mb-6 text-gray-800 dark:text-gray-100 flex items-center">
+                        <span class="w-8 h-8 rounded-full bg-accent-100 dark:bg-accent-900 text-accent-500 dark:text-accent-400 flex items-center justify-center mr-2">
+                            <i class="fas fa-desktop"></i>
+                        </span>
+                        图形界面（推荐）
+                    </h3>
+                    <div class="bg-gray-900 dark:bg-gray-950 rounded-2xl p-5 mb-8 overflow-x-auto">
+                        <pre class="text-gray-300 text-sm md:text-base"><code class="language-bash"># 启动图形界面
+streamlit run app.py</code></pre>
+                        <div class="flex justify-end mt-4">
+                            <button class="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-md bg-gray-800 text-gray-300 hover:bg-gray-700">
+                                <i class="far fa-copy mr-1.5"></i> 复制代码
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-accent-50 dark:bg-accent-900/30 border border-accent-200 dark:border-accent-800 rounded-xl p-6 mb-8">
+                        <h4 class="font-semibold text-accent-700 dark:text-accent-400 mb-3">图形界面使用流程</h4>
+                        <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-300">
+                            <li class="flex items-start">
+                                <span class="text-accent-500 dark:text-accent-400 mr-2">•</span>
+                                <span><strong>步骤 1</strong>: 配置检查与修改 - 确保ASR模型路径和API Key设置正确</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-accent-500 dark:text-accent-400 mr-2">•</span>
+                                <span><strong>步骤 2</strong>: 启动ASR服务 - 点击按钮启动服务</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-accent-500 dark:text-accent-400 mr-2">•</span>
+                                <span><strong>步骤 3</strong>: 处理视频 - 上传视频文件并开始处理</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-accent-500 dark:text-accent-400 mr-2">•</span>
+                                <span><strong>步骤 4</strong>: 查看结果 - 在界面中查看生成的笔记</span>
+                            </li>
+                        </ul>
+                    </div>
+
                     <div class="md:w-1/2 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-750 dark:to-gray-800 p-8 md:p-10 border-t md:border-t-0 md:border-l border-gray-200 dark:border-gray-700">
                         <h3 class="text-2xl font-semibold mb-6 text-gray-800 dark:text-gray-100">运行要求</h3>
                         <div class="space-y-6">
@@ -1772,7 +2074,23 @@ python cli.py batch /path/to/videos/folder --recursive</code></pre>
                                 </div>
                             </div>
                         </div>
-                        
+                        <div class="mt-12 bg-gradient-to-r from-accent-50 to-primary-50 dark:from-accent-900/30 dark:to-primary-900/30 border border-accent-200/50 dark:border-accent-800/50 rounded-xl p-6">
+                            <div class="flex">
+                                <div class="flex-shrink-0 mr-4">
+                                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-accent-400 to-primary-400 flex items-center justify-center text-white shadow-md">
+                                        <i class="fas fa-desktop text-xl"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-xl mb-3 text-gray-800 dark:text-gray-100">推荐使用图形界面</h4>
+                                    <p class="text-gray-600 dark:text-gray-300">全新的图形界面提供更直观的操作体验，无需命令行经验也能轻松使用。从配置修改到结果查看，一站式完成所有操作。</p>
+                                    <a href="#gui-interface" class="inline-flex items-center mt-4 text-accent-600 dark:text-accent-400 font-medium hover:underline">
+                                        了解更多图形界面特性
+                                        <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                         <div class="mt-12 bg-gradient-to-r from-primary-50 to-accent-50 dark:from-primary-900/30 dark:to-accent-900/30 border border-primary-200/50 dark:border-primary-800/50 rounded-xl p-6">
                             <div class="flex">
                                 <div class="flex-shrink-0 mr-4">
@@ -1815,6 +2133,24 @@ pip install -r requirements.txt</code></pre>
                                 </div>
                             </div>
                             
+                            <div>
+                                <h4 class="text-xl font-semibold mb-4 flex items-center text-gray-800 dark:text-gray-100">
+                                    <span class="w-8 h-8 rounded-full bg-accent-500 text-white flex items-center justify-center mr-3">1.5</span>
+                                    启动图形界面（推荐）
+                                </h4>
+                                <p class="mb-4 text-gray-600 dark:text-gray-300">推荐使用图形界面，启动更简单：</p>
+                                <div class="bg-gray-900 dark:bg-gray-950 rounded-xl p-4 overflow-x-auto mb-4">
+                                    <pre class="text-gray-300 text-sm"><code class="language-bash">streamlit run app.py</code></pre>
+                                </div>
+                                <p class="mb-4 text-gray-600 dark:text-gray-300">启动后，浏览器会自动打开图形界面，按照界面提示完成以下操作：</p>
+                                <ul class="list-disc pl-6 text-gray-600 dark:text-gray-300 space-y-2">
+                                    <li>配置检查与修改</li>
+                                    <li>启动ASR服务</li>
+                                    <li>上传并处理视频</li>
+                                    <li>查看生成的笔记</li>
+                                </ul>
+                            </div>
+
                             <div>
                                 <h4 class="text-xl font-semibold mb-4 flex items-center text-gray-800 dark:text-gray-100">
                                     <span class="w-8 h-8 rounded-full bg-accent-500 text-white flex items-center justify-center mr-3">2</span>
